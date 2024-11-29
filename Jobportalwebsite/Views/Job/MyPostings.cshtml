@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Jobportalwebsite.Models.Job>
+
+<div class="container">
+    <h2>My Job Postings</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Job Title</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in Model)
+            {
+                <tr>
+                    <td>@job.JobTitle</td>
+                    <td>@job.Location</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@job.Id" class="btn btn-warning">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@job.Id" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

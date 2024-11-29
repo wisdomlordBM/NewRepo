@@ -1,0 +1,266 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .container-fluid.wall {
+        background-image: url('/images/obi4.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 65vh;
+        color: white;
+    }
+
+    .work {
+        text-align: center;
+        color: aqua;
+    }
+
+    .footer-links a {
+        color: #12bcaa;
+        text-decoration: none;
+    }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+   
+</style>
+<div id="demo" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+
+    <!-- Indicators/dots -->
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+    </div>
+
+    <!-- The slideshow/carousel -->
+    <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+            <img src="~/images/freepik__upload__51312.jpeg" alt="Find Your Dream Job" class="d-block w-100" loading="lazy" style="height: 80vh; object-fit: cover;">
+            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center text-white" style="height: 100%;">
+                <h1 class="display-4 fw-bold">
+                    <i class="fa fa-briefcase" style="font-size:50px;color:#12bcaa;"></i>
+                    Find Your Dream Job Today!
+                </h1>
+                <p class="lead mt-3">
+                    Explore top job opportunities. Register your company or apply for your next big career move with ease.
+                </p>
+                <div class="mt-4">
+                    <a class="btn btn-primary btn-lg" style="background-color: #12bcaa; border: none;" asp-area="" asp-controller="Account" asp-action="Login">
+                        Browse Jobs
+                    </a>
+                    <a class="btn btn-outline-secondary btn-lg" asp-area="" asp-controller="Account" asp-action="Register">Register Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+            <img src="~/images/coins-job-word.jpg" alt="Build Your Career" class="d-block w-100" loading="lazy" style="height: 80vh; object-fit: cover;">
+            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center text-white" style="height: 100%;">
+                <h1 class="display-4 fw-bold">
+                    Unlock Your Career Potential!
+                </h1>
+                <p class="lead mt-3">
+                    Create a profile and get matched with jobs tailored to your skills and interests. Start your journey today!
+                </p>
+                <div class="mt-4">
+                    
+                     
+                    <a class="btn btn-outline-secondary btn-lg" style="background-color: #12bcaa; border: none;" asp-area="" asp-controller="Account" asp-action="Register"> Create Profile</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+            <img src="~/images/hul.jpg" alt="Hire Top Talent" class="d-block w-100" loading="lazy" style="height: 80vh; object-fit: cover;">
+            <div class="carousel-caption d-flex flex-column justify-content-center align-items-center text-white" style="height: 100%;">
+                <h1 class="display-4 fw-bold">
+                    Hire the Best Talent!
+                </h1>
+                <p class="lead mt-3">
+                    Post job listings and connect with skilled professionals. Build your team for success.
+                </p>
+                <div class="mt-4">
+                   
+                    <a class="btn btn-primary btn-lg" style="background-color: #12bcaa; border: none;" asp-area="" asp-controller="Account" asp-action="CompanyRegister">Post a Job</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Left and right controls/icons -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+
+
+
+
+<div class="container-fluid mt-5">
+    <div class="row text-center">
+        <div class="col-sm-4">
+            <h3>Work From Home <i class="bi bi-house-fill"></i></h3>
+            <p>Embrace the freedom of working from the comfort of your home. Choose flexible schedules that fit your lifestyle and enjoy greater work-life balance.</p>
+            <p>Hundreds of companies worldwide are actively seeking remote talent. Don't miss your chance—apply today and secure your ideal work-from-home job!</p>
+        </div>
+        <div class="col-sm-4">
+            <h3>Work from Office <i class="bi bi-buildings-fill"></i></h3>
+            <p>Looking for an in-office job? We connect you with companies in your area and beyond, offering exciting career opportunities.</p>
+            <p>Explore openings at top organizations, network with professionals, and boost your career growth. Find your dream office job today—apply now!</p>
+        </div>
+        <div class="col-sm-4">
+            <h3>Company Registration <i class="bi bi-building-fill"></i></h3>
+            <p>Are you a company in search of talented employees? Register with us to gain access to a vast pool of qualified job seekers from around the globe.</p>
+            <p>Our platform makes it easy to connect with the right candidates, saving time and resources. Expand your reach and grow your team—register now!</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="container-fluid p-5 my-5 bg-dark text-white">
+    <div class="row">
+        <div class="col-sm-4">
+            <h1>Work From Home</h1>
+            <p>Take control of your career with flexible, remote work opportunities. Whether you're looking for full-time or part-time roles, we have you covered.</p>
+            <p>Global companies are actively seeking remote talent across various industries. Don’t wait—apply now and work from anywhere in the world.</p>
+            <h2><i class="bi bi-bell-fill"></i> Advance Your Career with OnyeJob</h2>
+            <p>Create a free account, complete your profile, and get matched with jobs tailored to your skills and preferences. Your dream job is just a few clicks away.</p>
+        </div>
+        <div class="col-sm-4">
+            <h1>Stay Ahead with Job Alerts</h1>
+            <p>Never miss an opportunity. Get personalized job alerts based on your experience, industry, and location preferences.</p>
+            <p>Receive notifications about the best job openings that match your profile and take the next step in your career today.</p>
+            <h2>Access Opportunities That Matter</h2>
+            <p>Join a community of professionals and discover roles that align with your career goals. Sign up now to unlock your potential.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <img src="~/images/img1.jpeg" class="img-fluid rounded" alt="Work from Home Image" />
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-4">Discover Your Next Career Opportunity</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="~/images/obi4.jpg" class="card-img-top" alt="Software Engineer">
+                <div class="card-body">
+                    <h5 class="card-title">Software Engineer</h5>
+                    <p class="card-text">Innovate and grow with a top-tier tech company.</p>
+                    
+                    <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Login">Apply Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="~/images/ist.jpg" class="card-img-top" alt="Marketing Specialist">
+                <div class="card-body">
+                    <h5 class="card-title">Marketing Specialist</h5>
+                    <p class="card-text">Develop creative campaigns that make a difference.</p>
+                    <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Login">Apply Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="~/images/images.jpg" class="card-img-top" alt="Product Manager">
+                <div class="card-body">
+                    <h5 class="card-title">Product Manager</h5>
+                    <p class="card-text">Lead teams and deliver high-impact products.</p>
+                    <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Login">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-5 bg-light my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="display-4 text-primary">FOR EMPLOYERS</h2>
+            <p>Searching for the right talent? We have over 3 million+ job-seekers across all levels, ready for your organization. Post a job today and get matched with top candidates.</p>
+            <p>Reach workers from around the globe, whether for remote or in-office roles. Register now to start hiring the best talent available.</p>
+            
+            <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="CompanyRegister">Post a Job</a>
+        </div>
+        <div class="col-md-6">
+            <img src="~/images/pexels-cottonbro-6535346.jpg" alt="Employer Hiring" class="img-fluid rounded">
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-5 bg-dark text-white my-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="display-4">Apply Now</h2>
+            <p>Find your dream job today! Whether you’re looking for remote or on-site positions, we have opportunities for every skill set and experience level.</p>
+            <p>Many companies are hiring right now. Apply now to start your career with us!</p>
+           
+            <a class="btn btn-outline-light btn-lg" asp-area="" asp-controller="Account" asp-action="Register">Create Profile</a>
+        </div>
+        <div class="col-md-4">
+            <img src="~/images/img1.jpeg" alt="Apply Now" class="img-fluid rounded">
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid p-5 bg-light text-center my-5">
+    <h2 class="text-primary">Advance Your Career Today</h2>
+    <p>Sign up for customized job alerts based on your skills, experience, and location. Get notified about opportunities that matter to you!</p>
+    
+    <a class="btn btn-primary btn-lg" asp-area="" asp-controller="Account" asp-action="Register">Sign Up for Alerts</a>
+</div>
+
+
+    <!-- Footer Section -->
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>About OnyeJob</h5>
+                <p>Your trusted platform for job opportunities and career advancement. Join millions of job seekers and employers today.</p>
+                    <p>Email: ilohonyebuchibm@gmail.com</p>
+                    <p>Phone: +234-8122-614-454</p>
+            </div>
+
+            <div class="col-md-4 footer-links">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/jobs">Browse Jobs</a></li>
+                    <li><a href="/employer/register">Post a Job</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Stay Connected</h5>
+                <p>Follow us on social media for updates and job tips.</p>
+                <a href="#" class="text-white"><i class="fab fa-facebook-f me-3"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-twitter me-3"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <hr>
+        <p class="text-center">&copy; 2024 OnyeJob. All Rights Reserved.</p>
+    </div>
+</footer>
+
+

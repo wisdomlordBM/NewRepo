@@ -1,0 +1,28 @@
+﻿ @model Jobportalwebsite.Models.Jobseekers
+
+<h2>Edit Jobseeker Profile</h2>
+
+<form asp-action="Edit">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input type="text" asp-for="Name" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input type="email" asp-for="Email" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Location"></label>
+        <input type="text" asp-for="Location" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Contact"></label>
+        <input type="text" asp-for="Contact" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-outline-success">Save Changes</button>
+</form>
+

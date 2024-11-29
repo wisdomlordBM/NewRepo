@@ -1,0 +1,21 @@
+﻿@model Jobportalwebsite.Models.Jobseekers
+
+<h2>Delete Jobseeker Profile</h2>
+
+<div>
+    <h4>Are you sure you want to delete this jobseeker?</h4>
+    <div>
+        <h5>Name: @Model.Name</h5>
+        <p>Email: @Model.Email</p>
+        <p>Location: @Model.Location</p>
+        <p>Contact: @Model.Contact</p>
+        <p>Description: @Model.Description</p>
+    </div>
+
+    <form asp-action="DeleteConfirmed">
+        <input type="hidden" @* asp-for="Id" *@ />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+

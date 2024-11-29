@@ -1,0 +1,162 @@
+﻿@model Jobportalwebsite.Models.Company
+
+@{
+    Layout = "~/Views/Shared/_Company.cshtml";
+}
+
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6 text-center text-lg-start">
+            <h1 class="display-4 fw-bold">Welcome to Our Company Hub</h1>
+            <p class="lead text-muted">Join a growing network of companies showcasing their profiles and job opportunities. Register now and unlock a world of possibilities.</p>
+            <a asp-action="Create" class="btn btn-success btn-lg mt-3">
+                <i class="bi bi-plus-circle"></i> &nbsp; Register Your Company
+            </a>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Empower Your Business</h5>
+                    <p class="card-text text-center">Elevate your company’s profile, reach new clients, and attract top-tier talent. Showcase your values, culture, and achievements in one place.</p>
+
+                    <!-- Image and Video -->
+                    <div class="d-flex justify-content-center">
+                        <div class="me-3">
+                            <img src="~/images/jobs/road.jpg" alt="Empower Your Business" class="img-fluid rounded">
+                             
+                        </div>
+                        <div class="ratio ratio-16x9" style="max-width: 300px;">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Company Intro Video" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Quote -->
+                    <blockquote class="blockquote text-center mt-4">
+                        <p class="mb-0">"Being part of this platform has revolutionized how we attract and retain top talent."</p>
+                        <footer class="blockquote-footer">Iloh onyebuchi, CEO of OnyeeJobWebsite</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row text-center mb-5">
+        <h2 class="mb-4">Why Register Your Company?</h2>
+        <div class="col-md-4">
+            <i class="bi bi-briefcase-fill text-success display-3"></i>
+            <h3 class="mt-3">Showcase Your Business</h3>
+            <p>Highlight your company’s achievements, mission, and vision to attract top talent and potential partners.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-person-check-fill text-primary display-3"></i>
+            <h3 class="mt-3">Hire the Best Talent</h3>
+            <p>Gain access to a pool of qualified job seekers and find the perfect fit for your team.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-globe text-info display-3"></i>
+            <h3 class="mt-3">Expand Your Reach</h3>
+            <p>Increase visibility and grow your business network through our platform.</p>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-5">
+        <a asp-action="Create" class="btn btn-outline-primary btn-lg">
+            <i class="bi bi-pencil-square"></i> &nbsp; Ready to Join? Register Now
+        </a>
+    </div>
+</div>
+
+
+
+
+@* @model Jobportalwebsite.Models.Company
+
+@{
+    Layout = "~/Views/Shared/_Company.cshtml";
+}
+
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6 text-center text-md-start">
+            <h1 class="display-4 fw-bold">Welcome to Our Company Hub</h1>
+            <p class="lead text-muted">Join a growing network of companies showcasing their profiles and job opportunities. Register now and unlock a world of possibilities.</p>
+            <a asp-action="Create" class="btn btn-success btn-lg mt-3">
+                <i class="bi bi-plus-circle"></i> &nbsp; Register Your Company
+            </a>
+        </div>
+        <div class="col-md-6">
+            <img src="https://via.placeholder.com/500x400" alt="Company Collaboration" class="img-fluid rounded shadow">
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row text-center mb-5">
+        <h2 class="mb-4">Why Register Your Company?</h2>
+        <div class="col-md-4">
+            <i class="bi bi-briefcase-fill text-success display-3"></i>
+            <h3 class="mt-3">Showcase Your Business</h3>
+            <p>Highlight your company’s achievements, mission, and vision to attract top talent and potential partners.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-person-check-fill text-primary display-3"></i>
+            <h3 class="mt-3">Hire the Best Talent</h3>
+            <p>Gain access to a pool of qualified job seekers and find the perfect fit for your team.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-globe text-info display-3"></i>
+            <h3 class="mt-3">Expand Your Reach</h3>
+            <p>Increase visibility and grow your business network through our platform.</p>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="bg-light py-5">
+        <h2 class="text-center mb-4">What Our Partners Say</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p>"This platform helped us find incredible talent and grow our team rapidly!"</p>
+                    <footer class="blockquote-footer">CEO, TechCorp</footer>
+                </blockquote>
+            </div>
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p>"Our company profile gained visibility, and we received multiple collaboration offers."</p>
+                    <footer class="blockquote-footer">Marketing Head, Innovate Inc.</footer>
+                </blockquote>
+            </div>
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p>"An excellent resource for connecting with professionals and expanding our network."</p>
+                    <footer class="blockquote-footer">HR Manager, BuildSmart</footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-5">
+        <a asp-action="Create" class="btn btn-outline-primary btn-lg">
+            <i class="bi bi-pencil-square"></i> &nbsp; Ready to Join? Register Now
+        </a>
+    </div>
+</div> *@
+
+
+
+
+
+
+@* @model Jobportalwebsite.Models.Company
+
+@{
+    Layout = "~/Views/Shared/_Company.cshtml";
+}
+
+<a asp-action="Create" class="btn btn-success"> <i class="bi bi-plus-circle"></i> &nbsp; Register Your  Company</a>
+ *@

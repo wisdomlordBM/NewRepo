@@ -1,0 +1,14 @@
+﻿@model Jobportalwebsite.Models.Job
+
+<div class="container">
+    <h2>@Model.JobTitle</h2>
+    <p>@Model.Description</p>
+    <p><strong>Location:</strong> @Model.Location</p>
+    <p><strong>Salary:</strong> @Model.Salary.ToString("C2")</p>
+    <p><strong>Employment Type:</strong> @Model.EmploymentType</p>
+
+    <form asp-action="Apply" asp-route-id="@Model.Id" method="post">
+        <button type="submit" class="btn btn-success">Apply for this Job</button>
+    </form>
+</div>
+

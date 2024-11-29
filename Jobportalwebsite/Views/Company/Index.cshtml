@@ -1,0 +1,189 @@
+﻿
+
+@model Jobportalwebsite.Viewmodel.CompanyDashboardViewModel
+@{
+    Layout = "~/Views/Shared/_Company.cshtml";
+}
+<div class="container mt-4">
+    <h2>Company Profile</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>Location</th>
+                <th>Industry</th>
+                <th>Website</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Name</td>
+                <td>@Model.Location</td>
+                <td>@Model.Industry</td>
+                <td><a href="@Model.WebsiteUrl" target="_blank">Website</a></td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash3-fill"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 class="mt-5 text-center text-secondary">Jobs</h3>
+
+    <div class="row">
+        @if (Model.Jobs != null && Model.Jobs.Any())
+        {
+            foreach (var job in Model.Jobs)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100" style="border-radius: 15px;">
+                        <img src="~/@job.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
+
+                        <div class="card-body">
+                            <h5 class="card-title">@job.JobTitle</h5>
+                            <p class="card-text text-truncate">@job.Description</p>
+                            <p class="mb-2"><strong>Location:</strong> @job.Location</p>
+                            <p class="mb-2"><strong>Employment Type:</strong> @job.EmploymentType</p>
+                           
+                            <p class="mb-2">
+                                <strong>Salary:</strong> @string.Format(new System.Globalization.CultureInfo("en-NG"), "{0:C2}", job.Salary)
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Status:</strong>
+                                @switch (job.JobPostStatus)
+                                {
+                                    case JobPostStatus.Pending:
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                        ;
+                                        break;
+                                    case JobPostStatus.Posted:
+                                        <span class="badge bg-success">Posted</span>
+                                        ;
+                                        break;
+                                    case JobPostStatus.Declined:
+                                        <span class="badge bg-danger">Declined</span>
+                                        ;
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">Unknown</span>
+                                        ;
+                                        break;
+                                }
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <a asp-controller="Job" asp-action="Edit" asp-route-id="@job.Id" class="btn btn-outline-success btn-sm">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a asp-controller="Job" asp-action="Delete" asp-route-id="@job.Id" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash3-fill"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <p>No jobs found for this company.</p>
+            </div>
+        }
+    </div>
+
+
+    <div class="col text-end">
+        <a asp-controller="Job" asp-action="Create" class="btn btn-outline-success">
+            <i class="bi bi-plus-circle"></i> &nbsp;Create New Job
+        </a>
+        
+        <a asp-action="ViewApplications" asp-route-companyId="@Model.CompanyId" class="btn btn-info">View Applications</a>
+       @*  <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> &nbsp;Add New Company
+        </a> *@
+    </div>
+</div>
+
+
+@* @model Jobportalwebsite.Models.Company
+
+<div class="container mt-4">
+    <h2>Company Profiles</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>Location</th>
+                <th>Industry</th>
+                <th>Website</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Name</td>
+                <td>@Model.Location</td>
+                <td>@Model.Industry</td>
+                <td><a href="@Model.WebsiteUrl" target="_blank">@Model.WebsiteUrl</a></td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash3-fill"></i> Delete
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mt-4">
+        @foreach (var job in Model.Jobs.Where(j => j.CompanyId == Model.Id))
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100" style="border-radius: 15px;">
+                    <img src="@Url.Content($"~/{job.ImageUrl}")" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@job.JobTitle</h5>
+                        <p class="card-text text-truncate">@job.Description</p>
+                        <p class="mb-2"><strong>Location:</strong> @job.Location</p>
+                        <p class="mb-2"><strong>Employment Type:</strong> @job.EmploymentType</p>
+                        <p class="mb-2">
+                            <strong>Salary:</strong> @job.Salary.ToString("C2", new System.Globalization.CultureInfo("ig-NG"))
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <a asp-controller="Job" asp-action="Edit" asp-route-id="@job.Id" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                            <a asp-controller="Job" asp-action="Delete" asp-route-id="@job.Id" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash3-fill"></i> Delete
+                            </a>
+                        </div>
+                        @if (job.PostStatus == Jobportalwebsite.Models.JobPostStatus.Pending)
+                        {
+                            <div class="alert alert-warning mt-2">
+                                This job is awaiting approval.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="text-end mt-3">
+        <a asp-controller="Job" asp-action="Create" class="btn btn-outline-success">
+            <i class="bi bi-plus-circle"></i> &nbsp;Create New Job
+        </a>
+    </div>
+</div>
+
+
+ *@

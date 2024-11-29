@@ -1,0 +1,239 @@
+﻿@model IEnumerable<Job>
+
+@{
+    Layout = "~/Views/Shared/_Jobseekers.cshtml";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="container">
+    <h1 class="mt-4 text-center">Job Listings</h1>
+
+    <!-- Improved Search Form -->
+    <div class="input-group mb-4" style="max-width: 600px; margin: 0 auto;">
+        <input id="jobSearchInput" type="text" class="form-control form-control-lg" placeholder="Search jobs by title, location, or type..." onkeyup="filterJobs()" aria-label="Search Jobs" style="border-radius: 30px 0 0 30px; border-right: none;">
+        <button class="btn btn-primary" id="searchButton" style="border-radius: 0 30px 30px 0; padding: 0 25px; font-size: 1rem;">
+            🔍 Search Jobs
+        </button>
+    </div>
+
+
+    <!-- Job Listings -->
+    <div id="jobList" class="row">
+        @foreach (var job in Model)
+        {
+            <div class="col-md-4 mb-4 job-card">
+                <div class="card shadow-sm h-100" style="border-radius: 15px;">
+                    <img src="~/@job.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>Job Title:</strong> <span class="job-title">@job.JobTitle</span></h5>
+                        <p><strong>Description:</strong> <span class="job-description">@job.Description</span></p>
+                        <p><strong>Location:</strong> <span class="job-location">@job.Location</span></p>
+                        <p><strong>Employment Type:</strong> <span class="job-employment">@job.EmploymentType</span></p>
+                        <p><strong>Salary:</strong> @job.Salary.ToString("C2", new System.Globalization.CultureInfo("ig-NG"))</p>
+                        <div class="d-flex justify-content-center">
+                            <a asp-controller="Jobseekers" asp-action="Create" asp-route-jobId="@job.Id" class="btn btn-outline-success">Apply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+   @*  <div id="jobList" class="row">
+        @foreach (var job in Model)
+        {
+            <div class="col-md-4 mb-4 job-card">
+                <div class="card shadow-sm h-100" style="border-radius: 15px;">
+                    <img src="~/@job.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title job-title">@job.JobTitle</h5>
+                        <p class="card-text text-truncate">@job.Description</p>
+                        <p><strong>Location:</strong> <span class="job-location">@job.Location</span></p>
+                        <p><strong>Employment Type:</strong> <span class="job-employment">@job.EmploymentType</span></p>
+                        <p><strong>Salary:</strong> @job.Salary.ToString("C2", new System.Globalization.CultureInfo("ig-NG"))</p>
+                        <div class="d-flex justify-content-center">
+                            <a asp-controller="Jobseekers" asp-action="Create" asp-route-jobId="@job.Id" class="btn btn-outline-success">Apply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div> *@
+</div>
+
+<!-- JavaScript for Filtering -->
+<script>
+    function filterJobs() {
+        const input = document.getElementById('jobSearchInput').value.toLowerCase();
+        const jobCards = document.querySelectorAll('.job-card');
+
+        jobCards.forEach(card => {
+            const title = card.querySelector('.job-title').innerText.toLowerCase();
+            const location = card.querySelector('.job-location').innerText.toLowerCase();
+            const employment = card.querySelector('.job-employment').innerText.toLowerCase();
+
+            if (title.includes(input) || location.includes(input) || employment.includes(input)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+
+
+
+
+
+
+@* 
+
+
+@model IEnumerable<Job>
+@{
+    Layout = "~/Views/Shared/_Jobseekers.cshtml";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<div class="container">
+    <h1 class="mt-4">Job Listing </h1>
+
+
+
+    <form class="input-group new-input SearchForm" method="post" asp-controller="Job" asp-action="Index">
+            <input name="searchString" type="text" class="form-control h3" placeholder="Search for a product here..." />
+            <button type="submit" class="btn btn-outline-dark" aria-label="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>Search
+            </button>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <p>No job found</p>
+    }
+    else
+    {
+
+    <div class="row">
+        @foreach (var job in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100" style="border-radius: 15px;">
+                    <img src="~/@job.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@job.JobTitle</h5>
+                        <p class="card-text text-truncate">@job.Description</p>
+                        <p><strong>Location:</strong> @job.Location</p>
+                        <p><strong>Employment Type:</strong> @job.EmploymentType</p>
+                        <p><strong>Salary:</strong> @job.Salary.ToString("C2", new System.Globalization.CultureInfo("ig-NG"))</p>
+                        <div class="d-flex justify-content-center">
+                            <a asp-controller="Jobseekers" asp-action="Create" asp-route-jobId="@job.Id" class="btn btn-outline-success">Apply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+</div> *@
+
+ 
+
+
+
+
+
+@* 
+@model IEnumerable<Job>
+@{
+    Layout = "~/Views/Shared/_Jobseekers.cshtml";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<form class="input-group new-input SearchForm" method="post" asp-controller="Job" asp-action="Search">
+    <input name="searchString" type="text" class="form-control h3" placeholder="Search for a product here..." />
+    <button type="submit" class="btn btn-outline-dark" aria-label="Search">
+        <i class="fa-solid fa-magnifying-glass"></i>Search
+    </button>
+</form>
+
+<div class="container">
+    <h1 class="mt-4">Job Listing </h1>
+    
+    <form class="input-group new-input SearchForm" method="post" asp-controller="Job" asp-action="Search" class="mb-4">
+        <div class="form-row">
+            <div class="col">
+                <input type="text" name="searchTerm" class="form-control" placeholder="Search by job title or company " />
+            </div>
+            <div class="col">
+                <select name="employmentType" class="form-control">
+                    <option value="">All</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Internship">Internship</option>
+                </select>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+          
+        </div>
+    </form>
+
+    <div class="row">
+        @foreach (var job in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100" style="border-radius: 15px;">
+                    <img src="~/@job.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@job.JobTitle</h5>
+                        <p class="card-text text-truncate">@job.Description</p>
+                        <p><strong>Location:</strong> @job.Location</p>
+                        <p><strong>Employment Type:</strong> @job.EmploymentType</p>
+                        <p><strong>Salary:</strong> @job.Salary.ToString("C2", new System.Globalization.CultureInfo("ig-NG"))</p>
+                        <div class="d-flex justify-content-center">
+                            <a asp-controller="Jobseekers" asp-action="Create" asp-route-jobId="@job.Id" class="btn btn-outline-success">Apply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+ *@
+
+
+
+
+
+
+
+
+
+
+

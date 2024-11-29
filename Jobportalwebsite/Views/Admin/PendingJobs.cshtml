@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Jobportalwebsite.Models.Job>
+
+<div class="container">
+    <h1 class="mt-4">Pending Jobs</h1>
+
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Job Title</th>
+                <th>Description</th>
+                <th>Company</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in Model)
+            {
+                <tr>
+                    <td>@job.JobTitle</td>
+                    <td>@job.Description</td>
+                    <td>@job.Company?.Name</td>
+                    <td>
+                        <form asp-action="ApproveJob" method="post" style="display:inline;">
+                            <input type="hidden" name="jobId" value="@job.Id" />
+                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                        </form>
+                        <form asp-action="DeclineJob" method="post" style="display:inline;">
+                            <input type="hidden" name="jobId" value="@job.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

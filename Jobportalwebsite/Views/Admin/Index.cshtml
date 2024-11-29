@@ -1,0 +1,115 @@
+﻿@{
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<style>
+    /* Add dark overlay to the background */
+    body {
+        background: url('/images/images.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: #ffffff;
+        position: relative;
+    }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+            z-index: 1;
+        }
+
+    /* Ensure the navbar is above the overlay */
+    nav {
+        position: relative;
+        z-index: 3; /* Higher than the overlay */
+    }
+
+    /* Ensure the content is above the overlay */
+    .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .card {
+        background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent card background */
+        color: #000000; /* Ensure card text is readable */
+    }
+
+    h2 {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Add text shadow for better visibility */
+    }
+</style>
+
+<!-- Navbar (Example) -->
+@* <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Panel</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav> *@
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Admin Dashboard</h2>
+    <div class="row g-4">
+        <!-- Jobseekers Card -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Jobseekers</h5>
+                    <p class="card-text">View, update, and manage all jobseekers.</p>
+                    @* <a href="@Url.Action("Jobseekers", "Admin")" class="btn btn-primary btn-block">Go</a> *@
+                    <a asp-controller="Jobseekers" asp-action="Index" class="btn btn-primary btn-block">Go</a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Companies Card -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Companies</h5>
+                    <p class="card-text">Monitor and edit company details.</p>
+                    <a href="@Url.Action("Companies", "Admin")" class="btn btn-primary btn-block">Go</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Listings Card -->
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Manage Job Listings</h5>
+                    <p class="card-text">Oversee and curate job postings.</p>
+                    <a href="@Url.Action("JobListings", "Admin")" class="btn btn-primary btn-block">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,12 @@
+﻿@model Jobportalwebsite.Models.Company
+@{
+    Layout = "~/Views/Shared/_Company.cshtml";
+}
+<div class="container">
+    <h2>@Model.Name</h2>
+    <p><strong>Industry:</strong> @Model.Industry</p>
+    <p><strong>Location:</strong> @Model.Location</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Website:</strong> <a href="@Model.WebsiteUrl" target="_blank">@Model.WebsiteUrl</a></p>
+</div>
+

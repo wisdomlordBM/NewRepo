@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Jobportalwebsite.Models.Company>
+@{
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+@{
+    ViewData["Title"] = "Manage Companies";
+}
+
+<h2>Manage Companies</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Company Name</th>
+            <th>Industry</th>
+            <th>Website URL</th>  
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var company in Model)
+        {
+            <tr>
+                <td>@company.Name</td>
+                <td>@company.Industry</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(company.WebsiteUrl))
+                    {
+                        <a href="@company.WebsiteUrl" target="_blank">@company.WebsiteUrl</a>
+                    }
+                    else
+                    {
+                        <span>No website provided</span>
+                    }
+                </td>
+                <td>
+                    
+                   @*  <a href="@Url.Action("EditCompany", "Admin", new { id = company.Id })" class="btn btn-warning">Edit</a> *@
+                    <a href="@Url.Action("DeleteCompany", "Admin", new { id = company.Id })" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this company?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

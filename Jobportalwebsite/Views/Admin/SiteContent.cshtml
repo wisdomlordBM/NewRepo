@@ -1,0 +1,17 @@
+﻿@* @model IEnumerable<SiteContent>
+
+@{
+    ViewData["Title"] = "Manage Site Content";
+}
+
+<h2>Manage Site Content</h2>
+
+@foreach (var content in Model)
+{
+    <div>
+        <h4>@content.Title</h4>
+        <p>@content.Description</p>
+        <a href="@Url.Action("Edit", "SiteContent", new { id = content.Id })" class="btn btn-warning">Edit</a>
+    </div>
+} *@
+

@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Job>
+@{
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+@{
+    ViewData["Title"] = "Manage Job Listings";
+}
+
+<h2>Manage Job Listings</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Employment Type</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <div class="row">
+            @foreach (var job in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100" style="border-radius: 15px;">
+                        <img src="~/@job.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
+
+                        <div class="card-body">
+                            <h5 class="card-title">@job.JobTitle</h5>
+                            <p class="mb-2"><strong>Location:</strong> @job.Location</p>
+                            <p class="mb-2"><strong>Employment Type:</strong> @job.EmploymentType</p>
+                            <p class="mb-2"><strong>Salary:</strong> @job.Salary.ToString("C2", new System.Globalization.CultureInfo("ig-NG"))</p>
+                            <p class="mb-2">
+                                <strong>Status:</strong>
+                                @switch (job.PostStatus)
+                                {
+                                    case JobPostStatus.Pending:
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                        ;
+                                        break;
+                                    case JobPostStatus.Posted:
+                                        <span class="badge bg-success">Posted</span>
+                                        ;
+                                        break;
+                                    case JobPostStatus.Declined:
+                                        <span class="badge bg-danger">Declined</span>
+                                        ;
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">Unknown</span>
+                                        ;
+                                        break;
+                                }
+                            </p>
+
+                            <div class="d-flex justify-content-between">
+                                @if (job.PostStatus == JobPostStatus.Pending)
+                                {
+                                    <form asp-action="ApproveJob" asp-controller="Admin" method="post" asp-route-id="@job.Id">
+                                        <button type="submit" class="btn btn-success btn-sm">Post</button>
+                                    </form>
+                                    <form asp-action="DeclineJob" asp-controller="Admin" method="post" asp-route-id="@job.Id">
+                                        <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                                    </form>
+                                }
+                                @if (job.PostStatus == JobPostStatus.Posted)
+                                {
+                                    <span class="text-muted">Already Posted</span>
+                                }
+                                @if (job.PostStatus == JobPostStatus.Declined)
+                                {
+                                    <span class="text-muted">Job declined, contact admin for reasons</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </tbody>
+</table>
+
+

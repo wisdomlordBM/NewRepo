@@ -1,0 +1,45 @@
+﻿@model Job
+
+<div class="container">
+    <h1 class="mt-4">Delete Job</h1>
+    <form asp-action="DeletePOST" method="post" class="mt-4">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="JobTitle" class="control-label"></label>
+            <input asp-for="JobTitle" disabled class="form-control" />
+            
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" disabled class="form-control"></textarea>
+          
+        </div>
+        <div class="form-group">
+            <label asp-for="Location" class="control-label"></label>
+            <input asp-for="Location" disabled class="form-control" />
+            
+        </div>
+      @*   <div class="form-group">
+            <label asp-for="CompanyName" class="control-label"></label>
+            <input asp-for="CompanyName" disabled class="form-control" />
+            
+        </div> *@
+        <div class="form-group">
+            <label asp-for="EmploymentType" class="control-label"></label>
+            <input asp-for="EmploymentType" disabled class="form-control" />
+           
+        </div>
+        <div class="form-group">
+            <label asp-for="Salary" class="control-label"></label>
+            <input asp-for="Salary" disabled class="form-control" />
+            
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageUrl" class="control-label">Image URL</label>
+            <input asp-for="ImageUrl" disabled class="form-control" placeholder="Enter URL for company or building image" />
+            
+        </div>
+        <button type="submit" class="btn btn-danger">Delete Job </button>
+        <a      asp-action="Index" class="btn btn-secondary">Back to Job Listings</a>
+    </form>
+</div>

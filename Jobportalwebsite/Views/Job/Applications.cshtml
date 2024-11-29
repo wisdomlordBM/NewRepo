@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Jobportalwebsite.Models.Application>
+
+<div class="container">
+    <h2>Applications for Job</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Applicant Name</th>
+                <th>Date Applied</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.Job.JobTitle</td>
+                    <td>@application.User.UserName</td>
+                    <td>@application.DateApplied.ToString("d")</td>
+                    <td>
+                        <a href="#" class="btn btn-primary">View Profile</a>
+                        <!-- Optionally add "Contact" functionality here -->
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
