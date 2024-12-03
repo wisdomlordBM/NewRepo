@@ -4,6 +4,7 @@ using Jobportalwebsite.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jobportalwebsite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241202125231_NotificationType")]
+    partial class NotificationType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -406,9 +409,6 @@ namespace Jobportalwebsite.Migrations
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CompanyName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -418,18 +418,20 @@ namespace Jobportalwebsite.Migrations
                     b.Property<int?>("JobId")
                         .HasColumnType("int");
 
-                    b.Property<string>("JobTitle")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("JobId");
 
                     b.ToTable("Notifications");
                 });
@@ -617,9 +619,23 @@ namespace Jobportalwebsite.Migrations
 
             modelBuilder.Entity("Jobportalwebsite.Services.Notification", b =>
                 {
-                    b.HasOne("Jobportalwebsite.Models.Admin", null)
+                    b.HasOne("Jobportalwebsite.Models.Admin", "Admin")
                         .WithMany("Notifications")
                         .HasForeignKey("AdminId");
+
+                    b.HasOne("Jobportalwebsite.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("Jobportalwebsite.Models.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId");
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Job");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

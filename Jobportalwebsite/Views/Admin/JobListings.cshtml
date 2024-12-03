@@ -31,6 +31,10 @@
                             <p class="mb-2"><strong>Location:</strong> @job.Location</p>
                             <p class="mb-2"><strong>Employment Type:</strong> @job.EmploymentType</p>
                             <p class="mb-2"><strong>Salary:</strong> @job.Salary.ToString("C2", new System.Globalization.CultureInfo("ig-NG"))</p>
+                            <p class="mb-2"><strong>Date Posted:</strong> @job.DatePosted.ToString("MMMM dd, yyyy")</p>
+                                
+                               
+                           
                             <p class="mb-2">
                                 <strong>Status:</strong>
                                 @switch (job.PostStatus)

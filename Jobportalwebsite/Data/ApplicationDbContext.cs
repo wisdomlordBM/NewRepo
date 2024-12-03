@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Jobportalwebsite.Models;
+using Jobportalwebsite.Services;
 
 namespace Jobportalwebsite.Data
 {

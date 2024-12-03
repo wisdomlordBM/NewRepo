@@ -1,36 +1,54 @@
 ﻿using Jobportalwebsite.Data;
 using Jobportalwebsite.Models;
-using Microsoft.Extensions.Logging;  // For logging notifications
+using Jobportalwebsite.Services;
+using Microsoft.EntityFrameworkCore;
 
-namespace Jobportalwebsite.Services
+public class NotificationService
 {
-    public class NotificationService
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly ILogger<NotificationService> _logger;
+    private readonly ApplicationDbContext _context;
+    private readonly ILogger<NotificationService> _logger;
 
-        public NotificationService(ApplicationDbContext context, ILogger<NotificationService> logger)
+    public NotificationService(ApplicationDbContext context, ILogger<NotificationService> logger)
+    {
+        _context = context;
+        _logger = logger;
+    }
+
+    public async Task NotifyAdminAsync(string message, int? companyId = null, int? jobId = null)
+    {
+        if (string.IsNullOrWhiteSpace(message))
         {
-            _context = context;
-            _logger = logger;
+            _logger.LogWarning("Notification message is empty. No notification will be created.");
+            return;
         }
 
-        public async Task NotifyAdmin(string message)
+        var notification = new Notification
         {
-            // You can implement email notification, or log it to the console as a placeholder
-            _logger.LogInformation($"Notification to Admin: {message}");
+            Message = message,
+            Date = DateTime.UtcNow,  // Use UTC for consistency across time zones
+            CompanyId = companyId,
+            JobId = jobId,
+            IsRead = false  // Mark as unread by default
+        };
 
-            // For example, log the message in the database if needed
-            var notification = new Notification
-            {
-                Message = message,
-                Date = DateTime.Now
-            };
-
+        try
+        {
             await _context.Notifications.AddAsync(notification);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"Notification created: {message}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error saving notification");
+            throw; // Re-throw to ensure calling code handles the error
         }
     }
 }
+
+
+
+
+
+
 
 

@@ -1,6 +1,6 @@
 ﻿using Jobportalwebsite.Data;
 using Jobportalwebsite.IHelper;
-using Jobportalwebsite.Models;
+using Jobportalwebsite.Models; 
 using Jobportalwebsite.Viewmodel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -37,57 +37,108 @@ namespace Jobportalwebsite.Controllers
         public IActionResult AdminRegister() => View();
 
         // POST: Register
-        [HttpPost]
-        public async Task<IActionResult> Register(RegistrationViewModel model)
-        {
-            if (!ModelState.IsValid) return View(model);
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegistrationViewModel model)
+        //{
+        //    if (!ModelState.IsValid) return View(model);
 
-            if (model.Password != model.ConfirmPassword)
-            {
-                ModelState.AddModelError("ConfirmPassword", "The password and confirm password do not match.");
-                return View(model);
-            }
+        //    if (model.Password != model.ConfirmPassword)
+        //    {
+        //        ModelState.AddModelError("ConfirmPassword", "The password and confirm password do not match.");
+        //        return View(model);
+        //    }
 
-            var userEmail = await _userManager.FindByEmailAsync(model.Email);
-            if (userEmail != null)
-            {
-                ModelState.AddModelError("Email", "Email already exists.");
-                return View(model);
-            }
+        //    var userEmail = await _userManager.FindByEmailAsync(model.Email);
+        //    if (userEmail != null)
+        //    {
+        //        ModelState.AddModelError("Email", "Email already exists.");
+        //        return View(model);
+        //    }
 
-            var addUser = await _userHelper.CreateUserByAsync(model);
-            if (addUser != null)
-            {
-                // Assign the Jobseeker role
-                await _userManager.AddToRoleAsync(addUser, "Jobseeker");
+        //    var addUser = await _userHelper.CreateUserByAsync(model);
+        //    if (addUser != null)
+        //    {
+               
+               
 
-                // Add jobseeker to the Jobseekers table
-                var jobseeker = new Jobseekers
-                {
-                    UserId = addUser.Id,
-                    Name = model.FirstName,
-                    Email = model.Email,
-                    Location = model .Address,
-                    Contact = model .PhoneNumber,
-                    Description = model.Gender,
-                };
+        //        TempData["Message"] = "Registered Successfully";
+        //        await _signInManager.PasswordSignInAsync(addUser, model.Password, true, true);
 
-                _context.Jobseekers.Add(jobseeker);
-                await _context.SaveChangesAsync();
+        //        return RedirectToAction("Login", "Account");
+        //    }
 
-                TempData["Message"] = "Registered Successfully";
-                await _signInManager.PasswordSignInAsync(addUser, model.Password, true, true);
-
-                return RedirectToAction("Login", "Account");
-            }
-
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
         // GET: Login
         public IActionResult Login() => View();
 
-        // POST: Login
+
+               [HttpPost]
+        public async Task<IActionResult> Register(RegistrationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.Password != model.ConfirmPassword)
+                {
+                    ModelState.AddModelError("ConfirmPassword", "The password and confirm password do not match.");
+                    return View(model);
+                }
+                if (model != null)
+                {
+                    var userEmail = await _userManager.FindByEmailAsync(model.Email);
+                    if (userEmail != null)
+                    {
+                        ModelState.AddModelError("Email", "Email already exists.");
+                        return View(model);
+                    }
+                    var addUser = await _userHelper.CreateUserByAsync(model);
+                    if (addUser != null)
+                    {
+                        TempData["Message"] = "Registered Successfully";
+                        await _signInManager.PasswordSignInAsync(addUser, addUser.PasswordHash, true, true);
+
+                        return RedirectToAction("Login", "Account");
+                    }
+                }
+                return View(model);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CompanyRegister(RegistrationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.Password != model.ConfirmPassword)
+                {
+                    ModelState.AddModelError("ConfirmPassword", "The password and confirm password do not match.");
+                    return View(model);
+                }
+                if (model != null)
+                {
+                    var userEmail = await _userManager.FindByEmailAsync(model.Email);
+                    if (userEmail != null)
+                    {
+                        ModelState.AddModelError("Email", "Email already exists.");
+                        return View(model);
+                    }
+                    var addUser = await _userHelper.CreateUserByAsync(model);
+                    if (addUser != null)
+                    {
+                        TempData["Message"] = "Registered Successfully";
+                        await _signInManager.PasswordSignInAsync(addUser, addUser.PasswordHash, true, true);
+
+                        return RedirectToAction("Login", "Account");
+                    }
+                }
+                return View(model);
+            }
+            return View(model);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)

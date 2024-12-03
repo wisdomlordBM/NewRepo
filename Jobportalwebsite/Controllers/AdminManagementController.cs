@@ -27,19 +27,19 @@ namespace Jobportalwebsite.Controllers
 
 
         // POST: Admin/ToggleJobseekerStatus (To toggle IsActive status)
-        [HttpPost]
-        public async Task<IActionResult> ToggleJobseekerStatus(int id, bool isActive)
-        {
-            var jobseeker = await _context.Jobseekers.FindAsync(id);
-            if (jobseeker != null)
-            {
-                jobseeker.IsActive = !isActive;  // Toggle the IsActive status
-                _context.Update(jobseeker);
-                await _context.SaveChangesAsync();
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> ToggleJobseekerStatus(int id, bool isActive)
+        //{
+        //    var jobseeker = await _context.Jobseekers.FindAsync(id);
+        //    if (jobseeker != null)
+        //    {
+        //        jobseeker.IsActive = !isActive;  // Toggle the IsActive status
+        //        _context.Update(jobseeker);
+        //        await _context.SaveChangesAsync();
+        //    }
 
-            return Json(new { success = true });  // Respond with success status
-        }
+        //    return Json(new { success = true });  // Respond with success status
+        //}
 
         // POST: Admin/ToggleJobseekerStatus (To toggle IsActive status)
         //[HttpPost]

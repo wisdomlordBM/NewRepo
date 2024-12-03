@@ -1,4 +1,16 @@
-﻿@{
+﻿
+
+
+
+
+
+
+
+
+
+
+
+ @{
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 @{
@@ -47,29 +59,7 @@
     }
 </style>
 
-<!-- Navbar (Example) -->
-@* <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Admin Panel</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Settings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav> *@
+
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Admin Dashboard</h2>
@@ -81,7 +71,7 @@
                     <h5 class="card-title">Manage Jobseekers</h5>
                     <p class="card-text">View, update, and manage all jobseekers.</p>
                     @* <a href="@Url.Action("Jobseekers", "Admin")" class="btn btn-primary btn-block">Go</a> *@
-                    <a asp-controller="Jobseekers" asp-action="Index" class="btn btn-primary btn-block">Go</a>
+                    <a asp-controller="Admin" asp-action="Jobseekers" class="btn btn-primary btn-block">Go</a>
 
                 </div>
             </div>
@@ -109,7 +99,66 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
+@* <div class="notifications-container">
+    <h3>Notifications (<span id="notificationCount">@ViewData["UnreadCount"]</span>)</h3>
+    <ul id="notificationList" class="list-group">
+        @foreach (var notification in (List<Notification>)ViewData["Notifications"])
+        {
+            <li class="list-group-item">
+                @if (notification.Type == "CompanyRegistration")
+                {
+                    <strong>New Company Registered:</strong>
+                    <p>@notification.Message</p>
+                }
+                else if (notification.Type == "NewJobPosted")
+                {
+                    <strong>New Job Posted:</strong>
+                    <p>@notification.Message</p>
+                }
+
+                <p>@notification.Date.ToString("g")</p>
+            </li>
+        }
+    </ul>
+</div> *@
+@if (Model != null && Model.Any())
+{
+    @foreach (var notification in Model)
+    {
+        <div class="notification">
+            <div class="notification-header">
+                <span class="notification-date">@notification.Date.ToString("MM/dd/yyyy HH:mm")</span>
+            </div>
+            <div class="notification-body">
+                <li class="list-group-item">
+                    @if (notification.Type == "CompanyRegistration")
+                    {
+                        <strong>New Company Registered:</strong>
+                        <p>@notification.Message</p>
+                    }
+                    else if (notification.Type == "NewJobPosted")
+                    {
+                        <strong>New Job Posted:</strong>
+                        <p>@notification.Message</p>
+                    }
+
+                    <p>@notification.Date.ToString("g")</p>
+                </li>
+            </div>
+            <div class="notification-footer">
+                <button class="mark-read-btn" data-id="@notification.Id">Mark as Read</button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>No notifications available.</p>
+}
+
+
+
 
 
 

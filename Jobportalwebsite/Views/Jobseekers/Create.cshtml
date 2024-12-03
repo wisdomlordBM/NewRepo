@@ -1,77 +1,109 @@
-﻿
- @model Jobportalwebsite.Models.Application 
+﻿@model Jobportalwebsite.Models.Application
 @{
     Layout = "~/Views/Shared/_Jobseekers.cshtml";
 }
 
+
+
+
 <form id="regForm" action="" method="post">
-    <div class="container">
-        <h2>Create Jobseekers Profile</h2>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg rounded-lg p-4 bg-light">
+                    <h2 class="text-center mb-4">Complete Your Application</h2>
 
-        <div id="personalDetails">
-            <h5 class="card-title">Personal Details</h5>
-        
-            <div class="form-group">
-                <label asp-for="Contact"></label>
-                <input type="text" asp-for="Contact" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label asp-for="Description">Describe your personality briefly</label>
-                <textarea asp-for="Description" class="form-control" required></textarea>
-            </div>
-            <button type="button" class="btn btn-outline-success" id="nextToEducation">Next</button>
-        </div>
+                    <div id="personalDetails">
+                        <h5 class="card-title text-center">Personal Details</h5>
+                        <hr class="mb-4">
 
-        <div id="educationalHistory" style="display:none;">
-            <h5 class="card-title">Educational History</h5>
-            <div class="form-group">
-                <label for="EducationLevel">Level of Education</label>
-                <input type="text" name="EducationLevel" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label for="FieldOfStudy">Field of Study</label>
-                <input type="text" name="FieldOfStudy" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label for="SchoolName">School Name</label>
-                <input type="text" name="SchoolName" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label for="EducationCity">City</label>
-                <input type="text" name="EducationCity" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label for="State">State</label>
-                <input type="text" name="State" class="form-control" required />
-            </div>
-            <button type="button" class="btn btn-outline-success" id="nextToJobExperience">Next</button>
-            <button type="button" class="btn btn-secondary" id="backToPersonalDetails">Back</button>
-        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Contact" class="form-label">Contact Information</label>
+                            <input type="text" asp-for="Contact" class="form-control" placeholder="Enter your contact details" required />
+                        </div>
 
-        <div id="jobExperience" style="display:none;">
-            <h5 class="card-title">Job Experience</h5>
-            <div class="form-group">
-                <label for="JobTitle">Job Title</label>
-                <input type="text" name="JobTitle" class="form-control" required />
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label">Describe Your Personality</label>
+                            <textarea asp-for="Description" class="form-control" placeholder="A brief description of yourself" required></textarea>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-outline-success px-5" id="nextToEducation">Next <i class="bi bi-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="educationalHistory" style="display:none;">
+                        <h5 class="card-title text-center">Educational History</h5>
+                        <hr class="mb-4">
+
+                        <div class="form-group mb-3">
+                            <label asp-for="EducationLevel" class="form-label">Level of Education</label>
+                            <input type="text" asp-for="EducationLevel" class="form-control" placeholder="e.g., Bachelor's Degree" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FieldOfStudy" class="form-label">Field of Study</label>
+                            <input type="text" asp-for="FieldOfStudy" class="form-control" placeholder="e.g., Computer Science" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="SchoolName" class="form-label">School Name</label>
+                            <input type="text" asp-for="SchoolName" class="form-control" placeholder="e.g., Harvard University" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="City" class="form-label">City</label>
+                            <input type="text" asp-for="City" class="form-control" placeholder="Enter your city's name" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="State" class="form-label">State</label>
+                            <input type="text" asp-for="State" class="form-control" placeholder="Enter your state's name" required />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-outline-success px-5" id="nextToJobExperience">Next <i class="bi bi-arrow-right"></i></button>
+                            <button type="button" class="btn btn-secondary px-5" id="backToPersonalDetails"><i class="bi bi-arrow-left"></i> Back</button>
+                        </div>
+                    </div>
+
+                    <div id="jobExperience" style="display:none;">
+                        <h5 class="card-title text-center">Job Experience</h5>
+                        <hr class="mb-4">
+
+                        <div class="form-group mb-3">
+                            <label asp-for="JobTitle" class="form-label">Job Title</label>
+                            <input type="text" asp-for="JobTitle" class="form-control" placeholder="e.g., Software Engineer" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="EmploymentType" class="form-label">Employment Type</label>
+                            <input type="text" asp-for="EmploymentType" class="form-control" placeholder="e.g., Full-Time, Part-Time" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="CompanyName" class="form-label">Company Name</label>
+                            <input type="text" asp-for="CompanyName" class="form-control" placeholder="e.g., TechWave Inc." required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="City" class="form-label">Job City</label>
+                            <input type="text" asp-for="City" class="form-control" placeholder="Enter the city of your last job" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Country" class="form-label">Job Country</label>
+                            <input type="text" asp-for="Country" class="form-control" placeholder="Enter the country of your last job" required />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-outline-success px-5">Submit</button>
+                            <button type="button" class="btn btn-secondary px-5" id="backToEducation"><i class="bi bi-arrow-left"></i> Back</button>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="form-group">
-                <label for="EmploymentType">Employment Type</label>
-                <input type="text" name="EmploymentType" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label for="CompanyName">Company Name</label>
-                <input type="text" name="CompanyName" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label for="City">JobCity</label>
-                <input type="text" name="City" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label for="Country">JobCountry</label>
-                <input type="text" name="Country" class="form-control" required />
-            </div>
-            <button type="submit" class="btn btn-outline-success">Submit</button>
-            <button type="button" class="btn btn-secondary" id="backToEducation">Back</button>
         </div>
     </div>
 </form>
@@ -97,5 +129,12 @@
         document.getElementById("educationalHistory").style.display = "block";
     };
 </script>
+
+<!-- Add Bootstrap icons and FontAwesome for better UI -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
+
+
 
 

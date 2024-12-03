@@ -235,6 +235,53 @@
         opacity: 0;
     }
 }*/
+.notification {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+    .notification.read {
+        background-color: #e0e0e0;
+    }
+
+.notification-header {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.notification-body {
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.notification-footer {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.notification.new-job {
+    border-left: 5px solid #007bff; /* Blue for new jobs */
+}
+
+.notification.new-company {
+    border-left: 5px solid #28a745; /* Green for new companies */
+}
+
+.mark-read-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+    .mark-read-btn:hover {
+        background-color: #0056b3;
+    }
 
 
 

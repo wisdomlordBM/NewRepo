@@ -13,10 +13,11 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <nav class="navbar navbar-expand-lg" style="background-color: #12bcaa;" data-bs-theme="dark">
+
             <div class="container-fluid">
-                <img src="~/images/logo.jpg" alt="Bootstrap" width="70" height="50">
-                <a class="navbar-brand" href="#">JOB PORTAL</a>
+                <img src="~/images/icon1.jpg" alt="Bootstrap" width="70" height="50">
+                <a class="navbar-brand" href="#"></a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -30,9 +31,7 @@
                             
                         </li>
                          
-                            @* <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a>
-                            </li> *@
+                           
                             
                         
                         <li class="nav-item">
@@ -44,48 +43,53 @@
 
                     </ul>
 
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+
+                            @* <li class="nav-item">
+                                <a class="nav-link" href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();">Logout</a>
+                            </li>
+                            <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;">
+                                @Html.AntiForgeryToken()
+                            </form> *@
 
 
+                            <li class="nav-item">
+                                @{
+                                    var roleToUrlMapping = new Dictionary<string, string>
+                            {
+                            { "Admin", Url.Action("Index", "Admin") },
+                            { "Jobseeker", Url.Action("Index", "Job") },
+                            { "Company", Url.Action("Index", "Company") }
+                            };
 
-                  @*   <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Separated link</a>
-                            </div>
-                        </li>
-                    </ul> *@
-                    <!-- Right-aligned Notification Icon with Badge -->
-                   @*  <ul class="navbar-nav ms-auto"> *@
-                       
-                       
-                       @*  <li class="nav-item me-3">
-                            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#notificationsModal">
-                                <i class="fas fa-bell"></i>
-                                <span class="badge badge-danger" id="notificationCount">0</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Jobseekers" asp-action="Index">Jobseekers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Account" asp-action="CompanyRegister">RegisterCompany</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                        </li>
-                    </ul> *@
-                    @* <form class="d-flex">
-                        
-                         <input class="form-control me-sm-2" type="search" placeholder="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button> 
-                    </form> *@
+                                    var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+                                    var dashboardUrl = roleToUrlMapping.ContainsKey(userRole ?? string.Empty)
+                                    ? roleToUrlMapping[userRole]
+                                    : Url.Action("Index", "Home");
+                                }
+                                <a class="nav-link" href="@dashboardUrl">Dashboard</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="CompanyRegister">RegisterCompany</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+                    </ul>
+
+
                 </div>
             </div>
         </nav>
