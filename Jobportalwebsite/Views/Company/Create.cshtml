@@ -4,49 +4,48 @@
 }
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <!-- Company Profile Creation Card -->
+      
         <div class="col-md-8">
             <div class="card shadow-lg p-5 mb-4" style="border-radius: 15px; background-color: #f8f9fa;">
                 <h2 class="card-title text-center text-primary mb-4">Create Your Company Profile</h2>
 
                 <form asp-action="Create">
-                    <!-- Company Name -->
+                  
                     <div class="form-group mb-4">
                         <label asp-for="Name" class="form-label fw-bold">Company Name</label>
                         <input type="text" asp-for="Name" class="form-control" id="Name" placeholder="Enter your company name" required />
                     </div>
 
-                    <!-- Email -->
+                  
                     <div class="form-group mb-4">
                         <label asp-for="Email" class="form-label fw-bold">Email</label>
                         <input type="email" asp-for="Email" class="form-control" id="Email" placeholder="Enter your company email" required />
                     </div>
 
-                    <!-- Description -->
                     <div class="form-group mb-4">
                         <label asp-for="Description" class="form-label fw-bold">Company Description</label>
                         <textarea asp-for="Description" class="form-control" id="Description" placeholder="Write a brief description about your company" rows="4" required></textarea>
                     </div>
 
-                    <!-- Location -->
+                   
                     <div class="form-group mb-4">
                         <label asp-for="Location" class="form-label fw-bold">Location</label>
                         <input type="text" asp-for="Location" class="form-control" id="Location" placeholder="Enter your company location" required />
                     </div>
 
-                    <!-- Industry -->
+                  
                     <div class="form-group mb-4">
                         <label asp-for="Industry" class="form-label fw-bold">Industry</label>
                         <input type="text" asp-for="Industry" class="form-control" id="Industry" placeholder="Enter the industry your company belongs to" required />
                     </div>
 
-                    <!-- Website URL -->
+                    
                     <div class="form-group mb-4">
                         <label asp-for="WebsiteUrl" class="form-label fw-bold">Website URL</label>
                         <input type="url" asp-for="WebsiteUrl" class="form-control" id="WebsiteUrl" placeholder="Enter your company website URL" required />
                     </div>
 
-                    <!-- Submit Button -->
+                   
                     <div class="d-grid mt-4">
                         <button type="submit" class="btn btn-success btn-lg">Submit</button>
                     </div>
