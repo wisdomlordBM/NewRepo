@@ -52,7 +52,7 @@
                         @if (job.PostStatus == JobPostStatus.Pending)
                         {
                             <form asp-action="ApproveJob" asp-controller="Admin" method="post" asp-route-id="@job.Id">
-                                <button type="submit" class="btn btn-success btn-sm">Post</button>
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
                             </form>
                             <form asp-action="DeclineJob" asp-controller="Admin" method="post" asp-route-id="@job.Id">
                                 <button type="submit" class="btn btn-danger btn-sm">Decline</button>
