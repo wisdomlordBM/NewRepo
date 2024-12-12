@@ -1,0 +1,300 @@
+﻿@using System.Security.Claims
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - Jobportalwebsite</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/bootstrap (4).css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/Jobportalwebsite.styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg" style="background-color: #12bcaa;" data-bs-theme="dark">
+
+			<div class="container-fluid">
+				<img src="~/images/icon1.jpg" alt="Bootstrap" width="70" height="50" style="border-radius:50%;">
+				<a class="navbar-brand" href="#"></a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse show" id="navbarColor01" style="">
+					<ul class="navbar-nav me-auto">
+						<li class="nav-item">
+
+							<a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+							<span class="visually-hidden">(current)</span>
+
+						</li>
+						<li class="nav-item">
+							<a class="nav-link " asp-area="" asp-controller="Job" asp-action="Index">Jobs</a>
+						</li>
+					</ul>
+					<ul class="navbar-nav ms-auto">
+
+
+
+
+
+
+						@if (User.Identity.IsAuthenticated)
+						{
+							<li class="nav-item">
+								<a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+							</li>
+							<li class="nav-item">
+								@{
+									var roleToUrlMapping = new Dictionary<string, string>
+							{
+							{ "Admin", Url.Action("Index", "Admin") },
+							{ "Jobseeker", Url.Action("Index", "Job") },
+							{ "Company", Url.Action("Index", "Company") }
+							};
+
+									var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+									var dashboardUrl = roleToUrlMapping.ContainsKey(userRole ?? string.Empty)
+									? roleToUrlMapping[userRole]
+									: Url.Action("Index", "Home");
+								}
+								<a class="nav-link" href="@dashboardUrl">Dashboard</a>
+							</li>
+						}
+						else
+						{
+							<li class="nav-item">
+								<a class="nav-link" asp-area="" asp-controller="Account" asp-action="CompanyRegister">RegisterCompany</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+							</li>
+						}
+					</ul>
+
+				</div>
+			</div>
+
+			@*             <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell"></i> <!-- Bell Icon -->
+                    <span class="badge bg-danger" id="unreadCount">0</span> <!-- Notification Count -->
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" id="notification-list">
+                    <li class="dropdown-header">Notifications</li>
+                    <!-- Dynamic notifications will be appended here -->
+                    <li class="dropdown-item">No new notifications</li>
+                </ul>
+            </li> *@
+			
+
+		</nav>
+
+
+
+	</header>
+
+	<div class="container-fluid">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class=footer text-muted bg-dark">
+
+		<footer class="bg-dark text-white py-2">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<h5>About OnyeJob</h5>
+						<p style="font-size: 14px;">Your trusted platform for job opportunities and career advancement. Join millions of job seekers and employers today.</p>
+						<p style="font-size: 14px;">Email: ilohonyebuchibm@gmail.com</p>
+						<p style="font-size: 14px;">Phone: +234-8122-614-454</p>
+					</div>
+
+					<div class="col-md-4 footer-links">
+						<h5>Quick Links</h5>
+						<ul class="list-unstyled" style="font-size: 14px;">
+							<li><a href="/about">About Us</a></li>
+							<li><a href="/contact">Contact</a></li>
+							<li><a href="/jobs">Browse Jobs</a></li>
+							<li><a href="/employer/register">Post a Job</a></li>
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<h5>Stay Connected</h5>
+						<p style="font-size: 14px;">Follow us on social media for updates and job tips.</p>
+						<a href="#" class="text-white"><i class="fab fa-facebook-f me-3"></i></a>
+						<a href="#" class="text-white"><i class="fab fa-twitter me-3"></i></a>
+						<a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+					</div>
+				</div>
+				<hr>
+				<p class="text-center" style="font-size: 14px;">&copy; 2024 OnyeJob. All Rights Reserved.</p>
+			</div>
+		</footer>
+		<div class="container">
+			&copy; 2024 - Jobportalwebsite - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		</div>
+	</footer>
+
+	<div class="modal fade" id="notificationsModal" tabindex="-1" aria-labelledby="notificationsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="notificationsModalLabel">Notifications</h5>
+					<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+
+					</button>
+				</div>
+				<div class="modal-body">
+					<ul id="notificationList" class="list-group">
+						<!-- Notifications will be loaded here -->
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<form method="post" asp-controller="Company" asp-action="MarkAllAsRead">
+						<button type="submit" class="btn btn-primary">Mark All as Read</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.3/jquery.validate.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.4/signalr.min.js"></script>
+	@* 
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")
+            .build();
+
+        connection.on("ReceiveNotification", function (message) {
+            // Update notification count
+            const unreadCountElement = document.getElementById('unreadCount');
+            const currentCount = parseInt(unreadCountElement.textContent) || 0;
+            unreadCountElement.textContent = currentCount + 1;
+
+            // Add notification to the dropdown list
+            const notificationList = document.getElementById('notification-list');
+            const newNotification = document.createElement('li');
+            newNotification.classList.add('dropdown-item');
+            newNotification.textContent = message;
+            notificationList.prepend(newNotification);
+
+            // Optional: Show a toast alert
+            alert(`New Notification: ${message}`);
+        });
+
+        connection.start().catch(err => console.error(err));
+    </script> *@
+	@* <script>
+        document.getElementById('notificationsDropdown').addEventListener('click', function () {
+            fetch('/Notification/MarkAllAsRead', { method: 'POST' })
+                .then(() => {
+                    document.getElementById('unreadCount').textContent = '0';
+                })
+                .catch(err => console.error('Error marking notifications as read:', err));
+        });
+    </script> *@
+
+
+	@*  <script>
+        $(document).ready(function () {
+            // Fetch notification count
+            $.get('/Notifications/GetNotificationCount', function (data) {
+                $('#notificationCount').text(data);
+            });
+
+
+            $('#notificationsModal').on('show.bs.modal', function () {
+                $.get('/Notifications/GetNotifications', function (notifications) {
+                    let notificationList = $('#notificationList');
+                    notificationList.empty();
+                    notifications.forEach(function (notification) {
+                        notificationList.append('<li class="list-group-item">' + notification.message + '</li>');
+                    });
+                });
+            });
+        });
+    </script> *@
+
+
+	@*    <script>
+        // Establish a SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")  // URL to your SignalR Hub
+            .build();
+
+        connection.on("ReceiveNotification", (message) => {
+            const notificationCount = document.getElementById("notificationCount");
+            const notificationList = document.getElementById("notificationList");
+
+            // Increase the notification count
+            notificationCount.innerText = parseInt(notificationCount.innerText) + 1;
+
+            // Display the notification message
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<a class="dropdown-item" href="#">${message}</a>`;
+            notificationList.appendChild(listItem);
+        });
+
+        connection.start()
+            .catch(err => console.error(err.toString()));
+    </script>
+ *@
+	<script>
+		$(document).ready(function () {
+			// Fetch notifications
+			$.get('/Company/GetUserNotifications', function (notifications) {
+				console.log(notifications); // Debugging output
+				let notificationList = $('#notificationList');
+				notificationList.empty();
+
+				// Append notifications to the list
+				notifications.forEach(function (notification) {
+					notificationList.append('<li class="list-group-item">' + notification.message + '</li>');
+				});
+
+				// Update notification count badge
+				let notificationCount = notifications.length;
+				$('#notificationCount').text(notificationCount); // Update count in the navbar
+
+				if (notificationCount > 0) {
+					$('#notificationCount').show(); // Show badge if there are notifications
+				} else {
+					$('#notificationCount').hide(); // Hide badge if no notifications
+				}
+			});
+
+			// Fetch notification count separately for the navbar badge
+			$.get('/Company/GetUserNotificationCount', function (count) {
+				$('#notificationCount').text(count);
+				if (count > 0) {
+					$('#notificationCount').show();
+				} else {
+					$('#notificationCount').hide();
+				}
+			});
+		});
+	</script>
+
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
