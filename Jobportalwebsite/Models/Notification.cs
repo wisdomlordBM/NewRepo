@@ -13,16 +13,22 @@ namespace Jobportalwebsite.Services
         public int? CompanyId { get; set; }
         public string? JobTitle { get; set; }
         public string? CompanyName { get; set; }
+
+        // Add a property to associate notifications with a user
+        public string? UserId { get; set; } // User identifier, e.g., ApplicationUser.Id
     }
 
     public enum NotificationType
     {
-        NewJob,
-        NewCompany
+        NewJob =1,
+        NewCompany = 2,
+        UserAlert = 3,
     }
-
-
 }
+
+
+
+
 
 
 

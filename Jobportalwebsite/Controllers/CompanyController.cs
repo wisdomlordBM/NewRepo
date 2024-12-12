@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Jobportalwebsite.Viewmodel;
+using Microsoft.AspNetCore.Identity;
 
 namespace Jobportalwebsite.Controllers
 {
@@ -15,14 +16,16 @@ namespace Jobportalwebsite.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly NotificationService _notificationService;  // Notification service field
-
+        private readonly UserManager<ApplicationUser> _userManager; // Inject UserManager
         // Constructor to inject ApplicationDbContext and NotificationService
-        public CompanyController(ApplicationDbContext context, NotificationService notificationService)
+        public CompanyController(ApplicationDbContext context, NotificationService notificationService, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _notificationService = notificationService;  // Assign the notification service
+            _userManager = userManager;
         }
 
+      
         // GET: Company/Create
         public IActionResult Create()
         {
@@ -57,91 +60,190 @@ namespace Jobportalwebsite.Controllers
             return View(company);
         }
 
-
-        // POST: Company/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(Company company)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        company.Email = User.Identity.Name;
-
-        //        var existingCompanyEmail = await _context.Companies
-        //            .FirstOrDefaultAsync(c => c.Email == company.Email);
-
-        //        if (existingCompanyEmail != null)
-        //        {
-        //            ModelState.AddModelError("Email", "The email address is already associated with another company.");
-        //            return View(company);
-        //        }
-
-        //        var existingCompanyName = await _context.Companies
-        //            .FirstOrDefaultAsync(c => c.Name == company.Name);
-
-        //        if (existingCompanyName != null)
-        //        {
-        //            ModelState.AddModelError("Name", "The name address is already associated with another company.");
-        //            return View(company);
-        //        }
-
-        //        _context.Companies.Add(company);
-        //        await _context.SaveChangesAsync();
-
-        //        // Create notification for admin about new company registration
-        //        var newCompanyNotification = new Notification
-        //        {
-        //            Message = "A new company has registered.",
-        //            IsRead = false,
-        //            Date = DateTime.Now,
-        //            Type = NotificationType.NewCompany,
-        //            CompanyId = company.Id,
-        //            CompanyName = company.Name
-        //        };
-
-        //        _context.Notifications.Add(newCompanyNotification);
-        //        _context.SaveChanges();
-
-
-        //        return RedirectToAction("Index", new { companyId = company.Id });
-        //    }
-
-
-        //    return View(company);
-        //}
         public IActionResult ViewApplications(int companyId)
         {
-
-
             var applications = _context.Applications
-            .Where(a => a.Job != null && a.Job.Company != null && a.Job.Company.Id == companyId)
-            .Include(a => a.Job)
-            .ThenInclude(j => j.Company)
-            .Include(a => a.User)
-            .Select(a => new ApplicationViewModel
-            {
-                JobTitle = a.Job.JobTitle,
-                ImageUrl = a.Job.ImageUrl,
-                CompanyId = a.Job.Company.Id,
-                Company = a.Job.Company,
-                EmploymentType = a.Job.EmploymentType,
-                Location = a.Job.Location,
-                Salary = a.Job.Salary,
-                UserId = a.UserId,
-                Email = a.User.Email ?? "N/A",
-                FirstName = a.User.FirstName ?? "N/A",
-                LastName = a.User.LastName ?? "N/A",
-                PhoneNumber = a.User.PhoneNumber ?? "N/A",
-                EducationLevel = a.EducationLevel,
-                Contact = a.Contact,
-                Description = a.Description,
-                DateApplied = a.DateApplied,
-                City = a.City,
-            })
-            .ToList();
+                .Where(a => a.Job != null && a.Job.Company != null && a.Job.Company.Id == companyId)
+                .Include(a => a.Job)
+                .ThenInclude(j => j.Company)
+                .Include(a => a.User)
+                .Select(a => new ApplicationViewModel
+                {
+                    Id = a.Id,
+                    JobTitle = a.Job.JobTitle,
+                    ImageUrl = a.Job.ImageUrl,
+                    CompanyId = a.Job.Company.Id,
+                    Company = a.Job.Company,
+                    EmploymentType = a.Job.EmploymentType,
+                    Location = a.Job.Location,
+                    Salary = a.Job.Salary,
+                    UserId = a.UserId,
+                    Email = a.User.Email ?? "N/A",
+                    FirstName = a.User.FirstName ?? "N/A",
+                    LastName = a.User.LastName ?? "N/A",
+                    PhoneNumber = a.User.PhoneNumber ?? "N/A",
+                    EducationLevel = a.EducationLevel,
+                    CVPath = a.CVPath,  // Ensure CVPath is populated
+                    Contact = a.Contact,
+                    Description = a.Description,
+                    DateApplied = a.DateApplied,
+                    City = a.City,
+                })
+                .ToList();
 
             return View(applications);
         }
+        [HttpPost]
+        public async Task<IActionResult> Check(int applicationId)
+        {
+            var application = await _context.Applications
+                .Include(a => a.User)
+                .Include(j => j.Job)
+                .ThenInclude(c => c.Company)
+                .FirstOrDefaultAsync(a => a.Id == applicationId);
+
+            if (application != null)
+            {
+                var userId = application.UserId;
+                var companyName = application.Job?.Company?.Name ?? "the company";
+                var companyId = application.Job?.Company?.Id;
+
+                var message = $"Your application is under review by {companyName}.";
+
+                await _notificationService.NotifyUserAsync(userId, message);
+
+                TempData["Message"] = "User has been notified about the review status.";
+
+                if (companyId.HasValue)
+                {
+                    return RedirectToAction("ViewApplications", "Company", new { companyId = companyId.Value });
+                }
+            }
+
+            return RedirectToAction("ViewApplications", "Company");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Accept(int applicationId)
+        {
+            var application = await _context.Applications
+                .Include(a => a.User)
+                .Include(j => j.Job)
+                .ThenInclude(c => c.Company)
+                .FirstOrDefaultAsync(a => a.Id == applicationId);
+
+            if (application != null)
+            {
+                var userId = application.UserId;
+                var companyId = application.Job?.Company?.Id;
+                var message = $"Congratulations! {application.Job?.Company?.Name ??      "The company"} has accepted your application. They will contact you soon.";
+
+                // Notify the user (job seeker) via SignalR
+                await _notificationService.NotifyUserAsync(userId, message);
+
+                TempData["Message"] = "User has been notified of acceptance.";
+
+                if (companyId.HasValue)
+                {
+                    return RedirectToAction("ViewApplications", "Company", new { companyId = companyId.Value });
+                }
+            }
+
+            return RedirectToAction("ViewApplications", "Company");
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Decline(int applicationId)
+        {
+            var application = await _context.Applications
+                .Include(a => a.User)
+                .Include(j => j.Job)
+                .ThenInclude(c => c.Company)
+                .FirstOrDefaultAsync(a => a.Id == applicationId);
+
+            if (application != null)
+            {
+                var userId = application.UserId;
+                var companyId = application.Job?.Company?.Id;
+                var message = $"We regret to inform you that your application for {application.Job?.JobTitle ?? "the job"} has been declined.";
+
+                // Notify the user (job seeker) via SignalR
+                await _notificationService.NotifyUserAsync(userId, message);
+
+                // Optionally remove the application if desired
+                _context.Applications.Remove(application);
+                await _context.SaveChangesAsync();
+
+                TempData["Message"] = "User has been notified of the decline.";
+
+                if (companyId.HasValue)
+                {
+                    return RedirectToAction("ViewApplications", "Company", new { companyId = companyId.Value });
+                }
+            }
+
+            return RedirectToAction("ViewApplications", "Company");
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserNotifications()
+        {
+            var userId = _userManager.GetUserId(User); // Get logged-in user's ID
+            var notifications = await _context.Notifications
+                .Where(n => n.UserId == userId && !n.IsRead && n.Type == NotificationType.UserAlert)
+                .OrderByDescending(n => n.Date)
+                .Take(5)
+                .Select(n => new { n.Message, n.Date })
+                .ToListAsync();
+
+            ViewData["Notifications"] = notifications;
+            ViewData["UnreadCount"] = notifications.Count;
+
+
+            return Json(notifications);
+        }
+        [HttpPost]
+        public async Task<IActionResult> MarkAllAsRead()
+        {
+            var userId = _userManager.GetUserId(User);
+            //var notifications = await _context.Notifications
+            //    .Where(n => n.UserId == userId && !n.IsRead)
+            //    .ToListAsync();
+            var notifications = _context.Notifications.Where(n => !n.IsRead && n.Type == NotificationType.UserAlert).ToList();
+
+            foreach (var notification in notifications)
+            {
+                notification.IsRead = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "Job");
+        }
+        [HttpGet]
+        public IActionResult GetUserNotificationCount()
+        {
+            var unreadCount = _context.Notifications.Count(n => !n.IsRead && n.Type == NotificationType.UserAlert);
+            return Json(unreadCount);
+        }
+        ////    [HttpPost]
+        ////public IActionResult MarkNotificationsAsRead()
+        ////{
+        ////    var notifications = _context.Notifications.Where(n => !n.IsRead).ToList();
+
+        ////    foreach (var notification in notifications)
+        ////    {
+        ////        notification.IsRead = true;
+        ////    }
+
+        ////    _context.SaveChanges();
+        ////    return RedirectToAction(nameof(Index));
+        ////}
+
+
+
 
 
 
@@ -163,7 +265,9 @@ namespace Jobportalwebsite.Controllers
             {
                 return RedirectToAction("CompanyRegistration");
             }
+            
 
+        
             var jobs = _context.Jobs
                 .Where(j => j.CompanyId == company.Id)
                 .Select(j => new JobViewModel
@@ -190,6 +294,8 @@ namespace Jobportalwebsite.Controllers
             };
 
             return View(viewModel);
+
+           
         }
 
 

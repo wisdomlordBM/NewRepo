@@ -22,14 +22,50 @@ namespace Jobportalwebsite.Controllers
 
 
 
-
         public IActionResult Index()
         {
             IEnumerable<Job> objJobList = _context.Jobs.Where(x => x.PostStatus == JobPostStatus.Posted);
             var listedJobs = objJobList.OrderByDescending(y => y.DatePosted);
+
+            // Fetch notifications for the logged-in user
+            var notifications = _context.Notifications
+                .Where(n => n.UserId == User.Identity.Name) // Ensure User.Identity.Name matches your user identifier
+                .OrderByDescending(n => n.Date)
+                .Take(10)
+                .ToList();
+
+            ViewData["Notifications"] = notifications;
+
             return View(listedJobs);
-            //return View(objJobList);
         }
+
+        //public IActionResult Index()
+        //{
+        //    // Fetching jobs with the given condition
+        //    IEnumerable<Job> objJobList = _context.Jobs.Where(x => x.PostStatus == JobPostStatus.Posted);
+        //    var listedJobs = objJobList.OrderByDescending(y => y.DatePosted);
+
+        //    // Fetching notifications (example)
+        //    var notifications = _context.Notifications // Replace with your actual notifications retrieval logic
+        //        .Where(n => n.UserId == User.Identity.Name) // Assuming User.Identity.Name holds the current user's identifier
+        //        .OrderByDescending(n => n.DateCreated)
+        //        .Take(10) // Limit to the latest 10 notifications
+        //        .Select(n => n.Message) // Assuming `Message` contains the notification text
+        //        .ToList();
+
+        //    // Passing notifications to the view
+        //    ViewData["Notifications"] = notifications;
+
+        //    return View(listedJobs);
+        //}
+
+        //public IActionResult Index()
+        //{
+        //    IEnumerable<Job> objJobList = _context.Jobs.Where(x => x.PostStatus == JobPostStatus.Posted);
+        //    var listedJobs = objJobList.OrderByDescending(y => y.DatePosted);
+        //    return View(listedJobs);
+        //    //return View(objJobList);
+        //}
 
 
 
@@ -234,7 +270,7 @@ namespace Jobportalwebsite.Controllers
 
             _context.Jobs.Remove(obj);
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "company");
         }
 
 

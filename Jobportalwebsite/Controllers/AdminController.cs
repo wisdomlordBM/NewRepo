@@ -91,7 +91,7 @@ namespace Jobportalwebsite.Controllers
         public IActionResult Index()
         {
             var notifications = _context.Notifications
-                .Where(n => !n.IsRead)
+                .Where(n => !n.IsRead && n.Type != NotificationType.UserAlert)
                 .OrderByDescending(n => n.Date)
                 .Take(5)
                 .ToList();
@@ -105,7 +105,7 @@ namespace Jobportalwebsite.Controllers
         [HttpGet]
         public IActionResult GetNotificationCount()
         {
-            var unreadCount = _context.Notifications.Count(n => !n.IsRead);
+            var unreadCount = _context.Notifications.Count(n => !n.IsRead && n.Type != NotificationType.UserAlert);
             return Json(unreadCount);
         }
 
@@ -113,7 +113,7 @@ namespace Jobportalwebsite.Controllers
         public IActionResult GetNotifications()
         {
             var notifications = _context.Notifications
-                .Where(n => !n.IsRead)
+                .Where(n => !n.IsRead && n.Type != NotificationType.UserAlert)
                 .OrderByDescending(n => n.Date)
                 .Take(5)
                 .Select(n => new { n.Message, n.Date })

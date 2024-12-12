@@ -1,18 +1,31 @@
-﻿@model Jobportalwebsite.Models.Application
+﻿ @model Jobportalwebsite.Models.Application
 @{
     Layout = "~/Views/Shared/_Jobseekers.cshtml";
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
 
 
 <form id="regForm" action="" method="post">
     <div class="container my-5">
+      <form id="regForm" action="" method="post" enctype="multipart/form-data">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="card shadow-lg rounded-lg p-4 bg-light">
                     <h2 class="text-center mb-4">Complete Your Application</h2>
 
+                    <!-- Personal Details -->
                     <div id="personalDetails">
                         <h5 class="card-title text-center">Personal Details</h5>
                         <hr class="mb-4">
@@ -32,6 +45,7 @@
                         </div>
                     </div>
 
+                    <!-- Educational History -->
                     <div id="educationalHistory" style="display:none;">
                         <h5 class="card-title text-center">Educational History</h5>
                         <hr class="mb-4">
@@ -62,11 +76,12 @@
                         </div>
 
                         <div class="text-center">
-                            <button type="button" class="btn btn-outline-success px-5" id="nextToJobExperience">Next <i class="bi bi-arrow-right"></i></button>
                             <button type="button" class="btn btn-secondary px-5" id="backToPersonalDetails"><i class="bi bi-arrow-left"></i> Back</button>
+                            <button type="button" class="btn btn-outline-success px-5" id="nextToJobExperience">Next <i class="bi bi-arrow-right"></i></button>
                         </div>
                     </div>
 
+                    <!-- Job Experience -->
                     <div id="jobExperience" style="display:none;">
                         <h5 class="card-title text-center">Job Experience</h5>
                         <hr class="mb-4">
@@ -95,23 +110,45 @@
                             <label asp-for="Country" class="form-label">Job Country</label>
                             <input type="text" asp-for="Country" class="form-control" placeholder="Enter the country of your last job" required />
                         </div>
-
+                        <div class="form-group mb-3">
+                            <label asp-for="CV" class="form-label">Upload Your CV</label>
+                            <input type="file" asp-for="CV" id="CVPath" class="form-control" accept=".pdf,.doc,.docx" placeholder="Upload your CV" />
+                        </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-outline-success px-5">Submit</button>
                             <button type="button" class="btn btn-secondary px-5" id="backToEducation"><i class="bi bi-arrow-left"></i> Back</button>
+                            <button type="submit" class="btn btn-outline-success px-5">Submit</button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-    </div>
+       </form>
+     </div>
 </form>
 
 <script>
+    function validateForm(formId) {
+        let valid = true;
+        const form = document.getElementById(formId);
+        const inputs = form.querySelectorAll('[required]');
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('is-invalid');
+                valid = false;
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return valid;
+    }
+
     document.getElementById("nextToEducation").onclick = function() {
-        document.getElementById("personalDetails").style.display = "none";
-        document.getElementById("educationalHistory").style.display = "block";
+        if (validateForm("personalDetails")) {
+            document.getElementById("personalDetails").style.display = "none";
+            document.getElementById("educationalHistory").style.display = "block";
+        }
     };
 
     document.getElementById("backToPersonalDetails").onclick = function() {
@@ -120,8 +157,10 @@
     };
 
     document.getElementById("nextToJobExperience").onclick = function() {
-        document.getElementById("educationalHistory").style.display = "none";
-        document.getElementById("jobExperience").style.display = "block";
+        if (validateForm("educationalHistory")) {
+            document.getElementById("educationalHistory").style.display = "none";
+            document.getElementById("jobExperience").style.display = "block";
+        }
     };
 
     document.getElementById("backToEducation").onclick = function() {
@@ -131,7 +170,12 @@
 </script>
 
 <!-- Add Bootstrap icons and FontAwesome for better UI -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
+
+
+
+
+
 
 
 

@@ -9,12 +9,21 @@
     Layout = "~/Views/Shared/_Jobseekers.cshtml";
 }
 
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">
         @TempData["SuccessMessage"]
     </div>
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
 
 
 
@@ -67,6 +76,28 @@
             </div>
         </div>
     </div>
+
+
+
+    
+    <div class="modal fade" id="jobDescriptionModal" tabindex="-1" aria-labelledby="jobDescriptionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="jobDescriptionModalLabel">Job Description</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalJobDescription"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="jobList" class="row">
         @foreach (var job in Model)
         {
@@ -75,7 +106,22 @@
                     <img src="~/@job.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
                     <div class="card-body">
                         <h5 class="card-title"><strong>Job Title:</strong> <span class="job-title">@job.JobTitle</span></h5>
-                        <p><strong>Description:</strong> <span class="job-description">@job.Description</span></p>
+                        <p>
+                            <strong>Description:</strong>
+                            @if (job.Description.Length > 100)
+                            {
+                                @job.Description.Substring(0, 100)
+
+
+                                <a href="#" class="btn btn-link text-primary" data-bs-toggle="modal" data-bs-target="#jobDescriptionModal" data-description="@job.Description" style="text-decoration: none;">
+                                    Read More
+                                </a>
+                                    }
+                                    else
+                                    {
+                        @job.Description
+                                    }
+                    </p>
                         <p><strong>Location:</strong> <span class="job-location">@job.Location</span></p>
                         <p><strong>Employment Type:</strong> <span class="job-employment">@job.EmploymentType</span></p>
                         <p><strong>Salary:</strong> @job.Salary.ToString("C2", new System.Globalization.CultureInfo("ig-NG"))</p>
@@ -142,6 +188,15 @@
     }
 </script>
 
+<script>
+    const jobDescriptionModal = document.getElementById('jobDescriptionModal');
+    jobDescriptionModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; 
+        const description = button.getAttribute('data-description'); 
+        const modalBody = jobDescriptionModal.querySelector('#modalJobDescription');
+        modalBody.textContent = description; 
+    });
+</script>
 
 <style>
     .job-card:hover {

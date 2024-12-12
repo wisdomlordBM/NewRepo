@@ -11,6 +11,7 @@ namespace Jobportalwebsite.Models
         public int? JobId { get; set; }
         public string? ImageUrl { get; set; }
         public int CompanyId { get; set; }
+        public int Id { get; set; }
         public Company? Company { get; set; }
         public string? EmploymentType { get; set; }
         public string? Location { get; set; }
@@ -23,6 +24,7 @@ namespace Jobportalwebsite.Models
         public string? Contact { get; set; }
         public string? Description { get; set; }
         public DateTime DateApplied { get; set; }
+        public string? CVPath { get; set; } // Add the CVPath property
         public string? UserId { get; set; }
         
         public ApplicationUser? User { get; set; }

@@ -73,3 +73,28 @@
     }
 </div>
 
+<div class="modal fade" id="jobDescriptionModal" tabindex="-1" aria-labelledby="jobDescriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="jobDescriptionModalLabel">Job Description</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="modalJobDescription"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const jobDescriptionModal = document.getElementById('jobDescriptionModal');
+    jobDescriptionModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Button that triggered the modal
+        const description = button.getAttribute('data-description'); // Extract info from data-* attributes
+        const modalBody = jobDescriptionModal.querySelector('#modalJobDescription');
+        modalBody.textContent = description; // Update modal content
+    });
+</script>
