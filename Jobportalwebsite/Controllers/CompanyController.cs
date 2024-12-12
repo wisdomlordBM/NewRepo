@@ -169,10 +169,10 @@ namespace Jobportalwebsite.Controllers
                 var companyId = application.Job?.Company?.Id;
                 var message = $"We regret to inform you that your application for {application.Job?.JobTitle ?? "the job"} has been declined.";
 
-                // Notify the user (job seeker) via SignalR
+               
                 await _notificationService.NotifyUserAsync(userId, message);
 
-                // Optionally remove the application if desired
+             
                 _context.Applications.Remove(application);
                 await _context.SaveChangesAsync();
 
@@ -191,7 +191,7 @@ namespace Jobportalwebsite.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserNotifications()
         {
-            var userId = _userManager.GetUserId(User); // Get logged-in user's ID
+            var userId = _userManager.GetUserId(User); 
             var notifications = await _context.Notifications
                 .Where(n => n.UserId == userId && !n.IsRead && n.Type == NotificationType.UserAlert)
                 .OrderByDescending(n => n.Date)
@@ -228,20 +228,7 @@ namespace Jobportalwebsite.Controllers
             var unreadCount = _context.Notifications.Count(n => !n.IsRead && n.Type == NotificationType.UserAlert);
             return Json(unreadCount);
         }
-        ////    [HttpPost]
-        ////public IActionResult MarkNotificationsAsRead()
-        ////{
-        ////    var notifications = _context.Notifications.Where(n => !n.IsRead).ToList();
-
-        ////    foreach (var notification in notifications)
-        ////    {
-        ////        notification.IsRead = true;
-        ////    }
-
-        ////    _context.SaveChanges();
-        ////    return RedirectToAction(nameof(Index));
-        ////}
-
+      
 
 
 
