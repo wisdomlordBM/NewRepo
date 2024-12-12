@@ -31,29 +31,29 @@
                         <strong>Description:</strong> @application.Description <br />
                         <strong>Applied On:</strong> @application.DateApplied.ToString("g")
                     </p>
-
                     @if (!string.IsNullOrEmpty(application.CVPath))
                     {
-                        <a href="@application.CVPath" class="btn btn-primary mb-2" download>Download CV</a>
+                        <a href="@Url.Content(application.CVPath)" target="_blank" class="btn btn-primary mb-2">View CV</a>
                     }
                     else
                     {
                         <p>No CV uploaded.</p>
                     }
+
                     <div class="d-flex justify-content-between">
-                        <!-- Check Button -->
+                       
                         <form asp-controller="Company" asp-action="Check" method="post">
                             <input type="hidden" name="applicationId" value="@application.Id" />
                             <button type="submit" class="btn btn-warning btn-sm">Check</button>
                         </form>
 
-                        <!-- Accept Button -->
+                       
                         <form asp-controller="Company" asp-action="Accept" method="post">
                             <input type="hidden" name="applicationId" value="@application.Id" />
                             <button type="submit" class="btn btn-success btn-sm">Accept</button>
                         </form>
 
-                        <!-- Decline Button -->
+                       
                         <form asp-controller="Company" asp-action="Decline" method="post">
                             <input type="hidden" name="applicationId" value="@application.Id" />
                             <button type="submit" class="btn btn-danger btn-sm">Decline</button>
