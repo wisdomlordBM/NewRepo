@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Jobportalwebsite.Viewmodel;
+using Jobportalwebsite.ViewModel;
 using Microsoft.AspNetCore.Identity;
+using Jobportalwebsite.Viewmodel;
 
 namespace Jobportalwebsite.Controllers
 {
@@ -93,6 +94,9 @@ namespace Jobportalwebsite.Controllers
 
             return View(applications);
         }
+
+   
+
         [HttpPost]
         public async Task<IActionResult> Check(int applicationId)
         {
@@ -228,14 +232,9 @@ namespace Jobportalwebsite.Controllers
             var unreadCount = _context.Notifications.Count(n => !n.IsRead && n.Type == NotificationType.UserAlert);
             return Json(unreadCount);
         }
-      
 
 
-
-
-
-
-        // GET: Company/Index
+        //GET: Company/Index
         public IActionResult Index()
         {
             if (!User.Identity.IsAuthenticated)
@@ -252,11 +251,32 @@ namespace Jobportalwebsite.Controllers
             {
                 return RedirectToAction("CompanyRegistration");
             }
-            
 
-        
+            // You can decide to leave out the jobs in the index view if you only want them on a separate page
+            var viewModel = new CompanyDashboardViewModel
+            {
+                CompanyId = company.Id,
+                Name = company.Name,
+                Location = company.Location,
+                Industry = company.Industry,
+                WebsiteUrl = company.WebsiteUrl
+            };
+
+            return View(viewModel);
+        }
+
+        //GET: Company/Jobs
+        public IActionResult Jobs(int companyId)
+        {
+            var company = _context.Companies.FirstOrDefault(c => c.Id == companyId);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
             var jobs = _context.Jobs
-                .Where(j => j.CompanyId == company.Id)
+                .Where(j => j.CompanyId == companyId)
                 .Select(j => new JobViewModel
                 {
                     Id = j.Id,
@@ -270,23 +290,120 @@ namespace Jobportalwebsite.Controllers
                 })
                 .ToList();
 
-            var viewModel = new CompanyDashboardViewModel
+            var jobsViewModel = new CompanyDashboardViewModel
             {
-                CompanyId = company.Id,
+                CompanyId = companyId,
                 Name = company.Name,
-                Location = company.Location,
-                Industry = company.Industry,
-                WebsiteUrl = company.WebsiteUrl,
                 Jobs = jobs
             };
 
-            return View(viewModel);
-
-           
+            return View(jobsViewModel);
         }
 
 
 
+
+
+        ////GET: Company/Index
+        //public IActionResult Index()
+        //{
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
+
+        //    var userEmail = User.Identity.Name;
+
+        //    var company = _context.Companies
+        //        .FirstOrDefault(c => c.Email == userEmail);
+
+        //    if (company == null)
+        //    {
+        //        return RedirectToAction("CompanyRegistration");
+        //    }
+
+
+
+        //    var jobs = _context.Jobs
+        //        .Where(j => j.CompanyId == company.Id)
+        //        .Select(j => new JobViewModel
+        //        {
+        //            Id = j.Id,
+        //            JobTitle = j.JobTitle,
+        //            Description = j.Description,
+        //            Location = j.Location,
+        //            EmploymentType = j.EmploymentType,
+        //            Salary = j.Salary,
+        //            ImageUrl = j.ImageUrl,
+        //            JobPostStatus = j.PostStatus
+        //        })
+        //        .ToList();
+
+        //    var viewModel = new CompanyDashboardViewModel
+        //    {
+        //        CompanyId = company.Id,
+        //        Name = company.Name,
+        //        Location = company.Location,
+        //        Industry = company.Industry,
+        //        WebsiteUrl = company.WebsiteUrl,
+        //        Jobs = jobs
+        //    };
+
+        //    return View(viewModel);
+
+
+        //}
+
+        //public IActionResult Index()
+        //{
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
+
+        //    var userEmail = User.Identity.Name;
+
+        //    var company = _context.Companies
+        //        .FirstOrDefault(c => c.Email == userEmail);
+
+        //    if (company == null)
+        //    {
+        //        return RedirectToAction("CompanyRegistration");
+        //    }
+
+        //    var viewModel = new CompanyDashboardViewModel
+        //    {
+        //        CompanyId = company.Id,
+        //        Name = company.Name,
+        //        Location = company.Location,
+        //        Industry = company.Industry,
+        //        WebsiteUrl = company.WebsiteUrl
+
+        //    };
+
+        //    return View(viewModel);
+        //}
+
+
+        //public IActionResult GetJobs(int companyId)
+        //{
+        //    var jobs = _context.Jobs
+        //        .Where(j => j.CompanyId == companyId)
+        //        .Select(j => new JobViewModel
+        //        {
+        //            Id = j.Id,
+        //            JobTitle = j.JobTitle,
+        //            Description = j.Description,
+        //            Location = j.Location,
+        //            EmploymentType = j.EmploymentType,
+        //            Salary = j.Salary,
+        //            ImageUrl = j.ImageUrl,
+        //            JobPostStatus = j.PostStatus
+        //        })
+        //        .ToList();
+
+        //    return PartialView("_JobsPartial", jobs);
+        //}
 
 
 

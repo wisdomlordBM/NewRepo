@@ -210,21 +210,34 @@ namespace Jobportalwebsite.Controllers
             return RedirectToAction(nameof(JobListings));
         }
 
+        //// Decline Job
+        //[HttpPost]
+        //public async Task<IActionResult> DeclineJob(int id)
+        //{
+        //    var job = await _context.Jobs.FindAsync(id);
+        //    if (job == null) return NotFound();
+
+        //    job.PostStatus = JobPostStatus.Declined;
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToAction(nameof(JobListings));
+        //}
+
         // Decline Job
         [HttpPost]
         public async Task<IActionResult> DeclineJob(int id)
         {
             var job = await _context.Jobs.FindAsync(id);
-            if (job == null) return NotFound();
+            if (job == null)
+                return NotFound();
 
-            job.PostStatus = JobPostStatus.Declined;
-            await _context.SaveChangesAsync();
+            _context.Jobs.Remove(job); // Remove the job from the database
+            await _context.SaveChangesAsync(); // Persist the changes
 
-            return RedirectToAction(nameof(JobListings));
+            return RedirectToAction(nameof(JobListings)); // Redirect to job listings
         }
 
 
-  
         // GET: Company/Delete/5
         public IActionResult DeleteCompany(int id)
         {

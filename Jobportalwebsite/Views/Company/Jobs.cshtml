@@ -4,83 +4,7 @@
 }
 
 <div class="container mt-4">
-    <h2>Company Profile</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Company Name</th>
-                <th>Location</th>
-                <th>Industry</th>
-                <th>Website</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>@Model.Name</td>
-                <td>@Model.Location</td>
-                <td>@Model.Industry</td>
-                <td><a href="@Model.WebsiteUrl" target="_blank">Website</a></td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-primary">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-danger">
-                        <i class="bi bi-trash3-fill"></i> Delete
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Button to view jobs -->
-    <div class="text-end mt-4">
-        <a asp-action="Jobs" asp-route-companyId="@Model.CompanyId" class="btn btn-primary">
-            <i class="bi bi-briefcase"></i> View Jobs
-        </a>
-    </div>
-</div>
-
-
-
-@* 
-
-@model Jobportalwebsite.Viewmodel.CompanyDashboardViewModel
-@{
-    Layout = "~/Views/Shared/_Company.cshtml";
-}
-<div class="container mt-4">
-    <h2>Company Profile</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Company Name</th>
-                <th>Location</th>
-                <th>Industry</th>
-                <th>Website</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>@Model.Name</td>
-                <td>@Model.Location</td>
-                <td>@Model.Industry</td>
-                <td><a href="@Model.WebsiteUrl" target="_blank">Website</a></td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-primary">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-danger">
-                        <i class="bi bi-trash3-fill"></i> Delete
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3 class="mt-5 text-center text-secondary">Jobs</h3>
-
+    <h2>@Model.Name's Jobs</h2>
     <div class="row">
         @if (Model.Jobs != null && Model.Jobs.Any())
         {
@@ -90,67 +14,64 @@
                     <div class="card shadow-sm h-100" style="border-radius: 15px;">
                         <img src="~/@job.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
 
+
                         <div class="card-body">
                             <h5 class="card-title">@job.JobTitle</h5>
-                            <p>  <p>
+                            <p>
                                 <strong>Description:</strong>
-                                    @if (job.Description.Length > 100)
-                                    {
-                                        @job.Description.Substring(0, 100)
-
+                                @if (job.Description.Length > 100)
+                                {
+                                    @job.Description.Substring(0, 100)
                                     <a href="#" class="btn btn-link text-primary" data-bs-toggle="modal" data-bs-target="#jobDescriptionModal" data-description="@job.Description" style="text-decoration: none;">
                                         Read More
                                     </a>
-
-
-
-                                    }
-                                    else
-                                    {
-                                        @job.Description
-                                    }
+                                }
+                                else
+                                {
+                                    @job.Description
+                                }
                             </p>
                             <p class="mb-2"><strong>Location:</strong> @job.Location</p>
                             <p class="mb-2"><strong>Employment Type:</strong> @job.EmploymentType</p>
-                           
                             <p class="mb-2">
                                 <strong>Salary:</strong> @string.Format(new System.Globalization.CultureInfo("en-NG"), "{0:C2}", job.Salary)
                             </p>
-
                             <p class="mb-2">
                                 <strong>Status:</strong>
                                 @switch (job.JobPostStatus)
                                 {
                                     case JobPostStatus.Pending:
                                         <span class="badge bg-warning text-dark">Pending</span>
-                                        ;
                                         break;
                                     case JobPostStatus.Posted:
                                         <span class="badge bg-success">Posted</span>
-                                        ;
                                         break;
                                     case JobPostStatus.Declined:
                                         <span class="badge bg-danger">Declined</span>
-                                        ;
                                         break;
                                     default:
                                         <span class="badge bg-secondary">Unknown</span>
-                                        ;
                                         break;
                                 }
                             </p>
-                            <div class="d-flex justify-content-between">
-                                    @if (job.JobPostStatus == JobPostStatus.Pending)
-                                    {
+
+                            <!-- Actions -->
+                            <div class="d-flex justify-content-between mt-3">
+                                <!-- Edit Job -->
+                                @if (job.JobPostStatus == JobPostStatus.Pending)
+                                {
                                     <a asp-controller="Job" asp-action="Edit" asp-route-id="@job.Id" class="btn btn-outline-success btn-sm">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </a>
-                                    }
+                                }
+
+                               
+
+                                <!-- Delete Job -->
                                 <a asp-controller="Job" asp-action="Delete" asp-route-id="@job.Id" class="btn btn-outline-danger btn-sm">
                                     <i class="bi bi-trash3-fill"></i> Delete
                                 </a>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -159,10 +80,29 @@
         else
         {
             <div class="col-12">
-                <p>No jobs found for this company.</p>
+                <p class="text-center text-secondary">No jobs found for this company. Use the button below to create a new job.</p>
             </div>
         }
     </div>
+
+  <div class="col text-end">
+    <div class="col text-end mt-4">
+        <a asp-controller="Job" asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Create New Job
+        </a>
+        <a asp-action="ViewApplications" asp-route-companyId="@Model.CompanyId" class="btn btn-info"> <i class="bi bi-person-lines-fill"></i>View Applications</a>
+
+            <a asp-action="Index" asp-route-companyId="@Model.CompanyId" class="btn btn-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Back to Profile
+            </a>
+    </div>
+
+  
+   
+       
+    
+</div>
+
     <div class="modal fade" id="jobDescriptionModal" tabindex="-1" aria-labelledby="jobDescriptionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -191,19 +131,4 @@
             modalBody.textContent = description; // Update modal content
         });
     </script>
-
-  
-
-
-
-    <div class="col text-end">
-        <a asp-controller="Job" asp-action="Create" class="btn btn-outline-success">
-            <i class="bi bi-plus-circle"></i> &nbsp;Create New Job
-        </a>
-        
-        <a asp-action="ViewApplications" asp-route-companyId="@Model.CompanyId" class="btn btn-info">View Applications</a>
-      
-    </div>
-</div> *@
-
 
