@@ -18,12 +18,9 @@ namespace Jobportalwebsite.Controllers
             _notificationService = notificationService;
         }
 
-
-
-
-
         public IActionResult Index()
         {
+            // Fetch jobs that are posted
             IEnumerable<Job> objJobList = _context.Jobs.Where(x => x.PostStatus == JobPostStatus.Posted);
             var listedJobs = objJobList.OrderByDescending(y => y.DatePosted);
 
@@ -34,10 +31,64 @@ namespace Jobportalwebsite.Controllers
                 .Take(10)
                 .ToList();
 
+            // Pass notifications to the view
             ViewData["Notifications"] = notifications;
 
             return View(listedJobs);
         }
+
+
+        //public IActionResult Index()
+        //{
+        //    // Fetch jobs that are posted
+        //    IEnumerable<Job> objJobList = _context.Jobs.Where(x => x.PostStatus == JobPostStatus.Posted);
+        //    var listedJobs = objJobList.OrderByDescending(y => y.DatePosted);
+
+        //    // Fetch notifications for the logged-in user
+        //    var notifications = _context.Notifications
+        //        .Where(n => n.UserId == User.Identity.Name) // Ensure User.Identity.Name matches your user identifier
+        //        .OrderByDescending(n => n.Date)
+        //        .Take(10)
+        //        .ToList();
+
+        //    // Get the current logged-in user's ID
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //    // Add a flag to each job whether the user has already applied
+        //    foreach (var job in listedJobs)
+        //    {
+        //        // Check if the logged-in user has already applied for this job
+        //        var existingApplication = _context.Applications
+        //            .FirstOrDefault(a => a.JobId == job.Id && a.UserId == userId);
+
+        //        // Add a flag indicating if the user has already applied
+        //        job.HasApplied = existingApplication != null;
+        //    }
+
+        //    ViewData["Notifications"] = notifications;
+
+        //    return View(listedJobs);
+        //}
+
+
+
+
+        //public IActionResult Index()
+        //{
+        //    IEnumerable<Job> objJobList = _context.Jobs.Where(x => x.PostStatus == JobPostStatus.Posted);
+        //    var listedJobs = objJobList.OrderByDescending(y => y.DatePosted);
+
+        //    // Fetch notifications for the logged-in user
+        //    var notifications = _context.Notifications
+        //        .Where(n => n.UserId == User.Identity.Name) // Ensure User.Identity.Name matches your user identifier
+        //        .OrderByDescending(n => n.Date)
+        //        .Take(10)
+        //        .ToList();
+
+        //    ViewData["Notifications"] = notifications;
+
+        //    return View(listedJobs);
+        //}
 
         //public IActionResult Index()
         //{

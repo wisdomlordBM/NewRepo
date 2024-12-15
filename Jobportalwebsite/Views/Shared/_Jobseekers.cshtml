@@ -81,26 +81,26 @@
                                   
                             </div>
                         </div>
-                               
-@*             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-bell"></i> <!-- Bell Icon -->
-                    <span class="badge bg-danger" id="unreadCount">0</span> <!-- Notification Count -->
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" id="notification-list">
-                    <li class="dropdown-header">Notifications</li>
-                    <!-- Dynamic notifications will be appended here -->
-                    <li class="dropdown-item">No new notifications</li>
-                </ul>
-            </li> *@
-             <ul class="navbar-nav ms-auto">
-                                        <li class="nav-item me-3">
-                                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#notificationsModal" style="position: relative;">
-                                                <i class="fas fa-bell" style="font-size: 1.5rem;"></i>
-                                                <span id="notificationCount" class="badge bg-danger" style="position: absolute; top: 0; right: 0; display: none;">0</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item me-3">
+                                    @* Check if the user is a Jobseeker directly in the @if condition *@
+                                    @if (User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "Jobseeker")
+                                    {
+                                        <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#notificationsModal" style="position: relative;">
+                                            <i class="fas fa-bell" style="font-size: 1.5rem;"></i>
+                                            <span id="notificationCount" class="badge bg-danger" style="position: absolute; top: 0; right: 0; display: none;">0</span>
+                                        </a>
+                                    }
+                                </li>
+                            </ul>
+
+
+
+                                           
+
+                                      
+                                    
 
                     </nav>
 
@@ -184,86 +184,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.4/signalr.min.js"></script>
-@* 
-    <script>
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/notificationHub")
-            .build();
 
-        connection.on("ReceiveNotification", function (message) {
-            // Update notification count
-            const unreadCountElement = document.getElementById('unreadCount');
-            const currentCount = parseInt(unreadCountElement.textContent) || 0;
-            unreadCountElement.textContent = currentCount + 1;
-
-            // Add notification to the dropdown list
-            const notificationList = document.getElementById('notification-list');
-            const newNotification = document.createElement('li');
-            newNotification.classList.add('dropdown-item');
-            newNotification.textContent = message;
-            notificationList.prepend(newNotification);
-
-            // Optional: Show a toast alert
-            alert(`New Notification: ${message}`);
-        });
-
-        connection.start().catch(err => console.error(err));
-    </script> *@
-    @* <script>
-        document.getElementById('notificationsDropdown').addEventListener('click', function () {
-            fetch('/Notification/MarkAllAsRead', { method: 'POST' })
-                .then(() => {
-                    document.getElementById('unreadCount').textContent = '0';
-                })
-                .catch(err => console.error('Error marking notifications as read:', err));
-        });
-    </script> *@
-
-   
-   @*  <script>
-        $(document).ready(function () {
-            // Fetch notification count
-            $.get('/Notifications/GetNotificationCount', function (data) {
-                $('#notificationCount').text(data);
-            });
-
-      
-            $('#notificationsModal').on('show.bs.modal', function () {
-                $.get('/Notifications/GetNotifications', function (notifications) {
-                    let notificationList = $('#notificationList');
-                    notificationList.empty();
-                    notifications.forEach(function (notification) {
-                        notificationList.append('<li class="list-group-item">' + notification.message + '</li>');
-                    });
-                });
-            });
-        });
-    </script> *@
-    
-    
- @*    <script>
-        // Establish a SignalR connection
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/notificationHub")  // URL to your SignalR Hub
-            .build();
-
-        connection.on("ReceiveNotification", (message) => {
-            const notificationCount = document.getElementById("notificationCount");
-            const notificationList = document.getElementById("notificationList");
-
-            // Increase the notification count
-            notificationCount.innerText = parseInt(notificationCount.innerText) + 1;
-
-            // Display the notification message
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `<a class="dropdown-item" href="#">${message}</a>`;
-            notificationList.appendChild(listItem);
-        });
-
-        connection.start()
-            .catch(err => console.error(err.toString()));
-    </script>
- *@
     <script>
         $(document).ready(function () {
             // Fetch notifications

@@ -58,31 +58,63 @@ namespace Jobportalwebsite.Controllers
         //    ViewBag.Message = TempData["SuccessMessage"];
         //    return View(jobseekersList);
         //}
-
         public IActionResult Create(int jobId)
         {
             // Get the current logged-in user's ID
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Retrieve the job details and user details to populate the application form if necessary
+            // Retrieve the job details
             var job = _context.Jobs.Include(j => j.Company).FirstOrDefault(j => j.Id == jobId);
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-         
+
             if (job == null || user == null)
             {
                 TempData["ErrorMessage"] = "You must register as a jobseeker to apply for a job.";
                 return RedirectToAction("Register", "Account"); // Return 404 if the job or user is not found
             }
-           
+
+            // Check if the user has already applied for the job
+            var existingApplication = _context.Applications
+                .FirstOrDefault(a => a.JobId == jobId && a.UserId == userId);
+
+            if (existingApplication != null)
+            {
+                TempData["ErrorMessage"] = "You have already applied for this job.";
+                return RedirectToAction("Index", "Job"); // Redirect to the job listing page with the error message
+            }
+
             // Pass job and user data to the view if you want to pre-populate form fields
             ViewBag.Job = job;
             ViewBag.User = user;
 
             return View();
         }
+
+        //public IActionResult Create(int jobId)
+        //{
+        //    // Get the current logged-in user's ID
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //    // Retrieve the job details and user details to populate the application form if necessary
+        //    var job = _context.Jobs.Include(j => j.Company).FirstOrDefault(j => j.Id == jobId);
+        //    var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+        //    if (job == null || user == null)
+        //    {
+        //        TempData["ErrorMessage"] = "You must register as a jobseeker to apply for a job.";
+        //        return RedirectToAction("Register", "Account"); // Return 404 if the job or user is not found
+        //    }
+
+        //    // Pass job and user data to the view if you want to pre-populate form fields
+        //    ViewBag.Job = job;
+        //    ViewBag.User = user;
+
+        //    return View();
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Application application, int jobId)
+        public async Task<IActionResult> Create(Application application, int jobId, IFormFile CV)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID
 
@@ -94,6 +126,20 @@ namespace Jobportalwebsite.Controllers
             {
                 TempData["ErrorMessage"] = "You cannot apply for the same job more than once.";
                 return RedirectToAction("Index", "Job");
+            }
+
+            // Validate the file size (10MB max)
+            if (CV != null && CV.Length > 5 * 1024 * 1024)
+            {
+                ModelState.AddModelError("CV", "File size exceeds the 5MB limit.");
+            }
+
+            // Validate file extension (only PDF, DOC, DOCX)
+            var allowedExtensions = new[] { ".pdf", ".doc", ".docx" };
+            var fileExtension = Path.GetExtension(CV?.FileName).ToLower();
+            if (CV != null && !allowedExtensions.Contains(fileExtension))
+            {
+                ModelState.AddModelError("CV", "Only PDF, DOC, and DOCX files are allowed.");
             }
 
             if (ModelState.IsValid)
@@ -125,12 +171,87 @@ namespace Jobportalwebsite.Controllers
                 _context.Applications.Add(myApplication);
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Application submitted successfully! Please upload your CV.";
-                return RedirectToAction("UploadCV", new { applicationId = myApplication.Id });
+                // If a CV is uploaded, save it
+                if (CV != null)
+                {
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "cvs");
+                    if (!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+
+                    var uniqueFileName = Guid.NewGuid() + Path.GetExtension(CV.FileName);
+                    var filePath = Path.Combine(uploadPath, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await CV.CopyToAsync(stream);
+                    }
+
+                    // Update the application with the CV file path
+                    myApplication.CVPath = "/uploads/cvs/" + uniqueFileName;
+                    _context.Update(myApplication);
+                    await _context.SaveChangesAsync();
+                }
+
+                TempData["SuccessMessage"] = "Application submitted successfully!";
+                return RedirectToAction("Index", "Job");
             }
 
             return View(application);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(Application application, int jobId)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID
+
+        //    // Check if the user has already applied for the job
+        //    var existingApplication = _context.Applications
+        //        .FirstOrDefault(a => a.JobId == jobId && a.UserId == userId);
+
+        //    if (existingApplication != null)
+        //    {
+        //        TempData["ErrorMessage"] = "You cannot apply for the same job more than once.";
+        //        return RedirectToAction("Index", "Job");
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        var job = _context.Jobs.Include(j => j.Company).FirstOrDefault(j => j.Id == jobId);
+        //        if (job == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        var myApplication = new Application
+        //        {
+        //            JobId = jobId,
+        //            Description = application.Description,
+        //            Contact = application.Contact,
+        //            EducationLevel = application.EducationLevel,
+        //            FieldOfStudy = application.FieldOfStudy,
+        //            SchoolName = application.SchoolName,
+        //            City = application.City,
+        //            State = application.State,
+        //            JobTitle = job.JobTitle,
+        //            CompanyName = job.Company.Name,
+        //            Country = application.Country,
+        //            EmploymentType = application.EmploymentType,
+        //            UserId = userId,
+        //            DateApplied = DateTime.Now
+        //        };
+
+        //        _context.Applications.Add(myApplication);
+        //        await _context.SaveChangesAsync();
+
+        //        TempData["SuccessMessage"] = "Application submitted successfully! Please upload your CV.";
+        //        return RedirectToAction("UploadCV", new { applicationId = myApplication.Id });
+        //    }
+
+        //    return View(application);
+        //}
 
         [HttpGet]
         public IActionResult UploadCV(int applicationId)

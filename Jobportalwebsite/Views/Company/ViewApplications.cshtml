@@ -29,6 +29,7 @@
                         <strong>Education Level:</strong> @application.EducationLevel <br />
                         <strong>City:</strong> @application.City <br />
                         <strong>Description:</strong> @application.Description <br />
+                        <strong>Salary:</strong> @application.Salary <br />
                         <strong>Applied On:</strong> @application.DateApplied.ToString("g")
                     </p>
                     @if (!string.IsNullOrEmpty(application.CVPath))
@@ -67,122 +68,6 @@
 </div>
 
 
-@* @model IEnumerable<Jobportalwebsite.Models.ApplicationViewModel>
-
-@{
-    Layout = "~/Views/Shared/_Company.cshtml";
-}
-
-<h2 class="mb-4">Applications</h2>
-<div class="row">
-    @foreach (var application in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="~/@application.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@application.JobTitle</h5>
-                    <p class="card-text">
-                        <strong>Applicant:</strong> @application.FirstName @application.LastName <br />
-                        <strong>Email:</strong> @application.Email <br />
-                        <strong>Phone:</strong> @application.PhoneNumber <br />
-                        <strong>Location:</strong> @application.Location <br />
-                        <strong>Type:</strong> @application.EmploymentType <br />
-                        <strong>Education Level:</strong> @application.EducationLevel <br />
-                        <strong>City:</strong> @application.City <br />
-                        <strong>Description:</strong> @application.Description <br />
-                        <strong>Applied On:</strong> @application.DateApplied.ToString("g")
-                    </p>
-
-                    @if (!string.IsNullOrEmpty(application.CVPath))
-                    {
-                        <a href="@application.CVPath" class="btn btn-primary" download>Download CV</a>
-                    }
-                    else
-                    {
-                        <p>No CV uploaded.</p>
-                    }
-                </div>
-            </div>
-        </div>
-    }
-</div> *@
-
-
-
-
-
-
-
-@*  @model IEnumerable<Jobportalwebsite.Models.ApplicationViewModel>
-
-@{
-    Layout = "~/Views/Shared/_Company.cshtml";
-}
-
-<h2 class="mb-4">Applications</h2>
-<div class="row">
-    @foreach (var application in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-
-                <img src="~/@application.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@application.JobTitle</h5>
-
-
-                     <p class="card-text">
-                        <strong>Applicant:</strong> @application.FirstName @application.LastName <br />
-                        <strong>Email:</strong> @application.Email <br />
-                        <strong>Phone:</strong> @application.PhoneNumber <br />
-                        <strong>Location:</strong> @application.Location <br />
-                         <strong>Type:</strong> @application.EmploymentType <br />
-                        <strong>Education Level:</strong> @application.EducationLevel <br />
-                        <strong>City:</strong> @application.City <br />
-                        <strong>Description:</strong> @application.Description <br />
-                        <strong>Applied On:</strong> @application.DateApplied.ToString("g")
-                    </p> 
-                </div>
-            </div>
-        </div>
-    }
-</div>
-
- *@
-
-
-
-@* @model IEnumerable<Jobportalwebsite.Models.ApplicationViewModel>
-
-@{
-    Layout = "~/Views/Shared/_Company.cshtml";
-}
-
-<h2 class="mb-4">Applications</h2>
-<div class="row">
-    @foreach (var application in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="~/@application.ImageUrl" alt="Job Image" class="card-img-top" style="height: 150px; object-fit: cover;">
-                
-                <div class="card-body">
-                    <h5 class="card-title">@application.JobTitle</h5>
-                    <p class="card-text">
-                        <strong>Applicant:</strong> @application?.User?.FirstName @application.User.LastName <br />
-                        <strong>Email:</strong> @application.User.Email <br />
-                        <strong>Phone:</strong> @application.User. PhoneNumber <br />
-                        <strong>Location:</strong> @application.Location <br />
-                        <strong>Contact:</strong> @application.Contact <br />
-                        <strong>Description:</strong> @application.Description <br />
-                        <strong>Applied On:</strong> @application.DateApplied.ToString("g")
-                    </p>
-                </div>
-            </div>
-        </div>
-    }
-</div> *@
 
 
 

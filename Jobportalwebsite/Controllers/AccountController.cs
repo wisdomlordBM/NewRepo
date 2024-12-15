@@ -102,31 +102,17 @@ namespace Jobportalwebsite.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegistrationViewModel model)
         {
-            // Check if all required fields are filled
-            if (string.IsNullOrWhiteSpace(model.FirstName) ||
-                string.IsNullOrWhiteSpace(model.LastName) ||
-                string.IsNullOrWhiteSpace(model.Email) ||
-                string.IsNullOrWhiteSpace(model.PhoneNumber) ||
-                string.IsNullOrWhiteSpace(model.Password) ||
-                string.IsNullOrWhiteSpace(model.ConfirmPassword) ||
-                string.IsNullOrWhiteSpace(model.DateOfBirth.ToString()) ||
-                string.IsNullOrWhiteSpace(model.Gender) ||
-                string.IsNullOrWhiteSpace(model.State) ||
-                string.IsNullOrWhiteSpace(model.Country) ||
-                string.IsNullOrWhiteSpace(model.Address))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "All fields are required.");
                 return View(model);
             }
 
-            // Check if password and confirm password match
             if (model.Password != model.ConfirmPassword)
             {
                 ModelState.AddModelError("ConfirmPassword", "The password and confirm password do not match.");
                 return View(model);
             }
-
-            // Check if email already exists
+          
             var userEmail = await _userManager.FindByEmailAsync(model.Email);
             if (userEmail != null)
             {
@@ -134,7 +120,6 @@ namespace Jobportalwebsite.Controllers
                 return View(model);
             }
 
-            // Create the user
             var addUser = await _userHelper.CreateUserByAsync(model, "Jobseeker");
             if (addUser != null)
             {
@@ -142,10 +127,41 @@ namespace Jobportalwebsite.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Return view with error if user creation fails
             ModelState.AddModelError(string.Empty, "An error occurred while creating the user.");
             return View(model);
         }
+
+        //////[HttpPost]
+        //////public async Task<IActionResult> Register(RegistrationViewModel model)
+        //////{
+        //////    // Check if the password and confirm password match
+        //////    if (model.Password != model.ConfirmPassword)
+        //////    {
+        //////        ModelState.AddModelError("ConfirmPassword", "The password and confirm password do not match.");
+        //////        return View(model);
+        //////    }
+
+        //////    // Check if email already exists
+        //////    var userEmail = await _userManager.FindByEmailAsync(model.Email);
+        //////    if (userEmail != null)
+        //////    {
+        //////        ModelState.AddModelError("Email", "Email already exists.");
+        //////        return View(model);
+        //////    }
+
+        //////    // Create the user
+        //////    var addUser = await _userHelper.CreateUserByAsync(model, "Jobseeker");
+        //////    if (addUser != null)
+        //////    {
+        //////        TempData["Message"] = "Jobseeker registered successfully.";
+        //////        return RedirectToAction("Login", "Account");
+        //////    }
+
+        //////    // Return view with error if user creation fails
+        //////    ModelState.AddModelError(string.Empty, "An error occurred while creating the user.");
+        //////    return View(model);
+        //////}
+
 
 
 

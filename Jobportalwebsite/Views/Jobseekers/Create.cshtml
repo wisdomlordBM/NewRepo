@@ -1,7 +1,5 @@
-﻿ @model Jobportalwebsite.Models.Application
-@{
-    Layout = "~/Views/Shared/_Jobseekers.cshtml";
-}
+﻿@model Jobportalwebsite.Models.Application
+
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger">
@@ -16,10 +14,235 @@
     </div>
 }
 
-
-<form id="regForm" action="" method="post">
+<form id="regForm" action="" method="post" enctype="multipart/form-data">
+  @* <form id="regForm" action="@Url.Action("Create", "Job", new { jobId = ViewBag.Job.Id })" method="post" enctype="multipart/form-data"> *@
+    @Html.AntiForgeryToken()
     <div class="container my-5">
-      <form id="regForm" action="" method="post" enctype="multipart/form-data">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg rounded-lg p-4 bg-light">
+                    <h2 class="text-center mb-4">Complete Your Application</h2>
+
+                    <!-- Personal Details -->
+                    <div id="personalDetails">
+                        <h5 class="card-title text-center">Personal Details</h5>
+                        <hr class="mb-4">
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Contact" class="form-label">Contact Information</label>
+                            <input type="text" asp-for="Contact" class="form-control" placeholder="Enter your contact details" required
+                                   id="phoneNumber" />
+                            <small id="phoneHelp" class="form-text text-muted">
+                                Please enter a valid phone number. Only numeric characters (0-9) are allowed.
+                            </small>
+                            <div id="phoneError" class="text-danger" style="display: none;">
+                                Only numeric values are allowed.
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label">Describe Your Personality</label>
+                            <textarea asp-for="Description" class="form-control" placeholder="A brief description of yourself" required></textarea>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-outline-success px-5" id="nextToEducation">Next <i class="bi bi-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Educational History -->
+                    <div id="educationalHistory" style="display:none;">
+                        <h5 class="card-title text-center">Educational History</h5>
+                        <hr class="mb-4">
+
+                        <div class="form-group mb-3">
+                            <label asp-for="EducationLevel" class="form-label">Level of Education</label>
+                            <input type="text" asp-for="EducationLevel" class="form-control" placeholder="e.g., Bachelor's Degree" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FieldOfStudy" class="form-label">Field of Study</label>
+                            <input type="text" asp-for="FieldOfStudy" class="form-control" placeholder="e.g., Computer Science" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="SchoolName" class="form-label">School Name</label>a
+                            <input type="text" asp-for="SchoolName" class="form-control" placeholder="e.g., Harvard University" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="City" class="form-label">City</label>
+                            <input type="text" asp-for="City" class="form-control" placeholder="Enter your city's name" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="State" class="form-label">State</label>
+                            <input type="text" asp-for="State" class="form-control" placeholder="Enter your state's name" required />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-secondary px-5" id="backToPersonalDetails"><i class="bi bi-arrow-left"></i> Back</button>
+                            <button type="button" class="btn btn-outline-success px-5" id="nextToJobExperience">Next <i class="bi bi-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Job Experience -->
+                    <div id="jobExperience" style="display:none;">
+                        <h5 class="card-title text-center">Job Experience</h5>
+                        <hr class="mb-4">
+
+                        <div class="form-group mb-3">
+                            <label asp-for="JobTitle" class="form-label">Job Title</label>
+                            <input type="text" asp-for="JobTitle" class="form-control" placeholder="e.g., Software Engineer" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="EmploymentType" class="form-label">Employment Type</label>
+                            <input type="text" asp-for="EmploymentType" class="form-control" placeholder="e.g., Full-Time, Part-Time" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="CompanyName" class="form-label">Company Name</label>
+                            <input type="text" asp-for="CompanyName" class="form-control" placeholder="e.g., TechWave Inc." required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="City" class="form-label">Job City</label>
+                            <input type="text" asp-for="City" class="form-control" placeholder="Enter the city of your last job" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Country" class="form-label">Job Country</label>
+                            <input type="text" asp-for="Country" class="form-control" placeholder="Enter the country of your last job" required />
+                        </div>
+
+                        <!-- CV Upload Section -->
+                        <div class="form-group mb-3">
+                            <label asp-for="CV" class="form-label">Upload Your CV</label>
+                            <input type="file" asp-for="CV" class="form-control" accept=".pdf,.doc,.docx" id="cvUpload" required />
+                            <small id="cvHelp" class="form-text text-muted">Accepted formats: PDF, DOC, DOCX. Max size: 5MB.</small>
+                            <span asp-validation-for="CV" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-secondary px-5" id="backToEducation"><i class="bi bi-arrow-left"></i> Back</button>
+                            <button type="submit" class="btn btn-outline-success px-5">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+     // Real-time phone number validation
+    function validatePhoneNumber(event) {
+        const phoneNumberField = document.getElementById("phoneNumber");
+        const phoneError = document.getElementById("phoneError");
+
+        // Check if the input contains any non-numeric characters
+        if (/[^0-9]/.test(phoneNumberField.value)) {
+            phoneError.style.display = "block";
+            phoneNumberField.setCustomValidity("Only numeric characters are allowed.");
+        } else {
+            phoneError.style.display = "none";
+            phoneNumberField.setCustomValidity("");
+        }
+    }
+
+    // Add event listener to the phone input field
+    document.getElementById("phoneNumber").addEventListener("input", validatePhoneNumber);
+
+    // Validate the form before navigating to the next section
+    function validateForm(sectionId) {
+        let valid = true;
+        const section = document.getElementById(sectionId);
+        const inputs = section.querySelectorAll('[required]');
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('is-invalid');
+                valid = false;
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return valid;
+    }
+
+    // Client-side file size validation (10MB max)
+    document.getElementById("cvUpload").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file && file.size > 10 * 1024 * 1024) { // 10MB in bytes
+            alert("File size exceeds the 10MB limit.");
+            event.target.value = ""; // Clear the file input
+        }
+    });
+
+    function validateForm(formId) {
+        let valid = true;
+        const form = document.getElementById(formId);
+        const inputs = form.querySelectorAll('[required]');
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('is-invalid');
+                valid = false;
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return valid;
+    }
+
+    document.getElementById("nextToEducation").onclick = function() {
+        if (validateForm("personalDetails")) {
+            document.getElementById("personalDetails").style.display = "none";
+            document.getElementById("educationalHistory").style.display = "block";
+        }
+    };
+
+    document.getElementById("backToPersonalDetails").onclick = function() {
+        document.getElementById("educationalHistory").style.display = "none";
+        document.getElementById("personalDetails").style.display = "block";
+    };
+
+    document.getElementById("nextToJobExperience").onclick = function() {
+        if (validateForm("educationalHistory")) {
+            document.getElementById("educationalHistory").style.display = "none";
+            document.getElementById("jobExperience").style.display = "block";
+        }
+    };
+
+    document.getElementById("backToEducation").onclick = function() {
+        document.getElementById("jobExperience").style.display = "none";
+        document.getElementById("educationalHistory").style.display = "block";
+    };
+</script>
+
+
+
+@* @model Jobportalwebsite.Models.Application
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<form id="regForm" action="" method="post" enctype="multipart/form-data">
+    <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <div class="card shadow-lg rounded-lg p-4 bg-light">
@@ -110,10 +333,15 @@
                             <label asp-for="Country" class="form-label">Job Country</label>
                             <input type="text" asp-for="Country" class="form-control" placeholder="Enter the country of your last job" required />
                         </div>
-                      @*   <div class="form-group mb-3">
+
+                        <!-- CV Upload Section -->
+                        <div class="form-group mb-3">
                             <label asp-for="CV" class="form-label">Upload Your CV</label>
-                            <input type="file" asp-for="CV" id="CVPath" class="form-control" accept=".pdf,.doc,.docx" placeholder="Upload your CV" />
-                        </div> *@
+                            <input type="file" asp-for="CV" class="form-control" accept=".pdf,.doc,.docx" id="cvUpload" required />
+                            <small id="cvHelp" class="form-text text-muted">Accepted formats: PDF, DOC, DOCX. Max size: 10MB.</small>
+                            <span asp-validation-for="CV" class="text-danger"></span>
+                        </div>
+
                         <div class="text-center">
                             <button type="button" class="btn btn-secondary px-5" id="backToEducation"><i class="bi bi-arrow-left"></i> Back</button>
                             <button type="submit" class="btn btn-outline-success px-5">Submit</button>
@@ -122,11 +350,19 @@
                 </div>
             </div>
         </div>
-       </form>
-     </div>
+    </div>
 </form>
 
 <script>
+    // Client-side file size validation (10MB max)
+    document.getElementById("cvUpload").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file && file.size > 10 * 1024 * 1024) { // 10MB in bytes
+            alert("File size exceeds the 10MB limit.");
+            event.target.value = ""; // Clear the file input
+        }
+    });
+
     function validateForm(formId) {
         let valid = true;
         const form = document.getElementById(formId);
@@ -167,10 +403,210 @@
         document.getElementById("jobExperience").style.display = "none";
         document.getElementById("educationalHistory").style.display = "block";
     };
+</script> *@
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
+@* @model Jobportalwebsite.Models.Application
+@{
+    Layout = "~/Views/Shared/_Jobseekers.cshtml";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<form id="regForm" action="" method="post">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg rounded-lg p-4 bg-light">
+                    <h2 class="text-center mb-4">Complete Your Application</h2>
+
+                    <!-- Personal Details -->
+                    <div id="personalDetails">
+                        <h5 class="card-title text-center">Personal Details</h5>
+                        <hr class="mb-4">
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Contact" class="form-label">Contact Information</label>
+                            <input type="text" asp-for="Contact" class="form-control" placeholder="Enter your contact details" required
+                                   id="phoneNumber" />
+                            <small id="phoneHelp" class="form-text text-muted">
+                                Please enter a valid phone number. Only numeric characters (0-9) are allowed.
+                            </small>
+                            <div id="phoneError" class="text-danger" style="display: none;">
+                                Only numeric values are allowed.
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label">Describe Your Personality</label>
+                            <textarea asp-for="Description" class="form-control" placeholder="A brief description of yourself" required></textarea>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-outline-success px-5" id="nextToEducation">Next <i class="bi bi-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Educational History -->
+                    <div id="educationalHistory" style="display:none;">
+                        <h5 class="card-title text-center">Educational History</h5>
+                        <hr class="mb-4">
+
+                        <div class="form-group mb-3">
+                            <label asp-for="EducationLevel" class="form-label">Level of Education</label>
+                            <input type="text" asp-for="EducationLevel" class="form-control" placeholder="e.g., Bachelor's Degree" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="FieldOfStudy" class="form-label">Field of Study</label>
+                            <input type="text" asp-for="FieldOfStudy" class="form-control" placeholder="e.g., Computer Science" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="SchoolName" class="form-label">School Name</label>
+                            <input type="text" asp-for="SchoolName" class="form-control" placeholder="e.g., Harvard University" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="City" class="form-label">City</label>
+                            <input type="text" asp-for="City" class="form-control" placeholder="Enter your city's name" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="State" class="form-label">State</label>
+                            <input type="text" asp-for="State" class="form-control" placeholder="Enter your state's name" required />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-secondary px-5" id="backToPersonalDetails"><i class="bi bi-arrow-left"></i> Back</button>
+                            <button type="button" class="btn btn-outline-success px-5" id="nextToJobExperience">Next <i class="bi bi-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Job Experience -->
+                    <div id="jobExperience" style="display:none;">
+                        <h5 class="card-title text-center">Job Experience</h5>
+                        <hr class="mb-4">
+
+                        <div class="form-group mb-3">
+                            <label asp-for="JobTitle" class="form-label">Job Title</label>
+                            <input type="text" asp-for="JobTitle" class="form-control" placeholder="e.g., Software Engineer" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="EmploymentType" class="form-label">Employment Type</label>
+                            <input type="text" asp-for="EmploymentType" class="form-control" placeholder="e.g., Full-Time, Part-Time" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="CompanyName" class="form-label">Company Name</label>
+                            <input type="text" asp-for="CompanyName" class="form-control" placeholder="e.g., TechWave Inc." required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="City" class="form-label">Job City</label>
+                            <input type="text" asp-for="City" class="form-control" placeholder="Enter the city of your last job" required />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Country" class="form-label">Job Country</label>
+                            <input type="text" asp-for="Country" class="form-control" placeholder="Enter the country of your last job" required />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="button" class="btn btn-secondary px-5" id="backToEducation"><i class="bi bi-arrow-left"></i> Back</button>
+                            <button type="submit" class="btn btn-outline-success px-5">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    // Real-time phone number validation
+    function validatePhoneNumber(event) {
+        const phoneNumberField = document.getElementById("phoneNumber");
+        const phoneError = document.getElementById("phoneError");
+
+        // Check if the input contains any non-numeric characters
+        if (/[^0-9]/.test(phoneNumberField.value)) {
+            phoneError.style.display = "block";
+            phoneNumberField.setCustomValidity("Only numeric characters are allowed.");
+        } else {
+            phoneError.style.display = "none";
+            phoneNumberField.setCustomValidity("");
+        }
+    }
+
+    // Add event listener to the phone input field
+    document.getElementById("phoneNumber").addEventListener("input", validatePhoneNumber);
+
+    // Validate the form before navigating to the next section
+    function validateForm(sectionId) {
+        let valid = true;
+        const section = document.getElementById(sectionId);
+        const inputs = section.querySelectorAll('[required]');
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('is-invalid');
+                valid = false;
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return valid;
+    }
+
+    // Navigate to Educational History Section if all fields are valid
+    document.getElementById("nextToEducation").onclick = function() {
+        if (validateForm("personalDetails")) {
+            document.getElementById("personalDetails").style.display = "none";
+            document.getElementById("educationalHistory").style.display = "block";
+        }
+    };
+
+    // Navigate back to Personal Details
+    document.getElementById("backToPersonalDetails").onclick = function() {
+        document.getElementById("educationalHistory").style.display = "none";
+        document.getElementById("personalDetails").style.display = "block";
+    };
+
+    // Navigate to Job Experience Section if all fields are valid
+    document.getElementById("nextToJobExperience").onclick = function() {
+        if (validateForm("educationalHistory")) {
+            document.getElementById("educationalHistory").style.display = "none";
+            document.getElementById("jobExperience").style.display = "block";
+        }
+    };
+
+    // Navigate back to Educational History
+    document.getElementById("backToEducation").onclick = function() {
+        document.getElementById("jobExperience").style.display = "none";
+        document.getElementById("educationalHistory").style.display = "block";
+    };
 </script>
 
 <!-- Add Bootstrap icons and FontAwesome for better UI -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> *@
+
 
 
 
