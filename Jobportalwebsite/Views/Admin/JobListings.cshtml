@@ -92,9 +92,10 @@
 <script>
     const jobDescriptionModal = document.getElementById('jobDescriptionModal');
     jobDescriptionModal.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget; // Button that triggered the modal
-        const description = button.getAttribute('data-description'); // Extract info from data-* attributes
+        const button = event.relatedTarget; 
+        const description = button.getAttribute('data-description');
         const modalBody = jobDescriptionModal.querySelector('#modalJobDescription');
-        modalBody.textContent = description; // Update modal content
+        modalBody.textContent = description;   
     });
 </script>
+  

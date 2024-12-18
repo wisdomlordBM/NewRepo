@@ -52,9 +52,11 @@
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="PhoneNumber">Phone Number</label>
-                        <input type="tel" asp-for="PhoneNumber" class="form-control" placeholder="Enter your phone number" pattern="\d*" title="Enter only numeric values" />
+                        <input type="tel" asp-for="PhoneNumber" id="PhoneNumber" class="form-control"
+                               placeholder="Enter your phone number" pattern="\d*" title="Only numeric values are allowed" />
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
+
                 </div>
 
                 <div class="row">
@@ -122,7 +124,67 @@
     </div>
 </div>
 
+
+@* @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.0/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        // Enforce numeric input and limit to 11 digits
+        document.getElementById("PhoneNumber").addEventListener("input", function (event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+
+            if (input.value.length > 11) {
+                input.value = input.value.slice(0, 11); // Limit to 11 digits
+            }
+        });
+
+        // Validate on blur (optional)
+        document.getElementById("PhoneNumber").addEventListener("blur", function () {
+            const input = event.target;
+            if (input.value.length !== 11) {
+                alert("Phone number must be exactly 11 digits.");
+                input.focus();
+            }
+        });
+    </script>
+} *@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.0/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        // Enforce numeric input and limit to 11 digits
+        document.getElementById("PhoneNumber").addEventListener("input", function (event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+
+            if (input.value.length > 11) {
+                input.value = input.value.slice(0, 11); // Limit to 11 digits
+            }
+        });
+
+        // Validate on blur and show error message below the input
+        document.getElementById("PhoneNumber").addEventListener("blur", function () {
+            const input = event.target;
+            const errorContainer = document.getElementById("PhoneNumberError");
+
+            // Remove previous error message if it exists
+            if (errorContainer) {
+                errorContainer.remove();
+            }
+
+            // Show error if the length is not 11
+            if (input.value.length !== 11) {
+                const errorMessage = document.createElement("div");
+                errorMessage.id = "PhoneNumberError";
+                errorMessage.style.color = "red";
+                errorMessage.innerText = "Phone number must be exactly 11 digits.";
+
+                // Insert the error message after the input
+                input.parentNode.appendChild(errorMessage);
+            }
+        });
+    </script>
 }
