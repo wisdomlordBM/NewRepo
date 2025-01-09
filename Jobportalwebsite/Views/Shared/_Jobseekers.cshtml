@@ -84,7 +84,6 @@
 
                             <ul class="navbar-nav ms-auto">
                                 <li class="nav-item me-3">
-                                    @* Check if the user is a Jobseeker directly in the @if condition *@
                                     @if (User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "Jobseeker")
                                     {
                                         <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#notificationsModal" style="position: relative;">
@@ -164,7 +163,6 @@
                 </div>
                 <div class="modal-body">
                     <ul id="notificationList" class="list-group">
-                        <!-- Notifications will be loaded here -->
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -187,29 +185,25 @@
 
     <script>
         $(document).ready(function () {
-            // Fetch notifications
             $.get('/Company/GetUserNotifications', function (notifications) {
-                console.log(notifications); // Debugging output
+                console.log(notifications);   
                 let notificationList = $('#notificationList');
                 notificationList.empty();
 
-                // Append notifications to the list
                 notifications.forEach(function (notification) {
                     notificationList.append('<li class="list-group-item">' + notification.message + '</li>');
                 });
 
-                // Update notification count badge
                 let notificationCount = notifications.length;
-                $('#notificationCount').text(notificationCount); // Update count in the navbar
+                $('#notificationCount').text(notificationCount); 
 
                 if (notificationCount > 0) {
-                    $('#notificationCount').show(); // Show badge if there are notifications
+                    $('#notificationCount').show();  
                 } else {
-                    $('#notificationCount').hide(); // Hide badge if no notifications
+                    $('#notificationCount').hide(); /
                 }
             });
 
-            // Fetch notification count separately for the navbar badge
             $.get('/Company/GetUserNotificationCount', function (count) {
                 $('#notificationCount').text(count);
                 if (count > 0) {

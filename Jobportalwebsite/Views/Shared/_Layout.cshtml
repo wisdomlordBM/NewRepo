@@ -73,10 +73,75 @@
             <span class="text-load">G</span>
         </div>
     </div>
+    <header>
+        <nav class="navbar navbar-expand-lg" style="background-color: #12bcaa;" data-bs-theme="dark">
+            <div class="container-fluid">
+                <!-- Logo -->
+                <img src="~/images/icon1.jpg" alt="Logo" width="70" height="50" style="border-radius: 50%;">
+                <a class="navbar-brand" href="#">DreamJob</a>
+
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar Links -->
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <!-- Left-aligned Links -->
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Blog")">Blog</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right-aligned Links -->
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                @* Map user roles to their respective dashboards *@
+                                @{
+                                    var roleToUrlMapping = new Dictionary<string, string>
+                            {
+                            { "Admin", Url.Action("Index", "Admin") },
+                            { "Jobseeker", Url.Action("Index", "Job") },
+                            { "Company", Url.Action("Index", "Company") }
+                            };
+                                    var userRole = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+                                    var dashboardUrl = roleToUrlMapping.ContainsKey(userRole ?? string.Empty)
+                                    ? roleToUrlMapping[userRole]
+                                    : Url.Action("Index", "Home");
+                                }
+                                <a class="nav-link" href="@dashboardUrl">Dashboard</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="CompanyRegister">Create Company</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
    
-    <header>
-        @* <nav class="navbar navbar-expand-lg bg-white navbar-light"> *@
+@*     <header>
+        
 
         <nav class="navbar navbar-expand-lg" style="background-color: #12bcaa;" data-bs-theme="dark">
 
@@ -104,12 +169,7 @@
                                 <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
 
-                            @* <li class="nav-item">
-                                <a class="nav-link" href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();">Logout</a>
-                            </li>
-                            <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;">
-                                @Html.AntiForgeryToken()
-                            </form> *@
+                          
 
                           
                             <li class="nav-item">
@@ -142,12 +202,22 @@
                             </li>
                         }
                     </ul>
-                   
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+
+                        
+                            <a class="nav-link" href="@Url.Action("Index", "Blog")">Blog</a>
+                        
+                        <span class="visually-hidden">(current)</span>
+
+                        </li>
+
+                    </ul>
                 </div>
             </div>
         </nav>
    
-    </header>
+    </header> *@
 
     <div class="container-fluid">
         <main role="main" class="pb-3">

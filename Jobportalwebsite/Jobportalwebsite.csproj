@@ -35,6 +35,7 @@
     <Folder Include="wwwroot\NewFolder1\" />
     <Folder Include="wwwroot\NewFolder\" />
     <Folder Include="wwwroot\uploads\cvs\" />
+    <Folder Include="wwwroot\uploads\Blog\" />
   </ItemGroup>
 
 </Project>

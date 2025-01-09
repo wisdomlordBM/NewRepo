@@ -15,6 +15,8 @@ namespace Jobportalwebsite.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Admin> Admins { get; set; }
        public DbSet<Jobseekers> Jobseekers { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Job>()

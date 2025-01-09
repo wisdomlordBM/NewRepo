@@ -1,0 +1,244 @@
+﻿@model Jobportalwebsite.Models.Blog
+@{
+    string blogUrl = ViewData["BlogUrl"] as string;
+}
+<div class="container mt-4">
+    <div class="card">
+        <div id="carouselBlogDetails" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @if (Model.PicturePaths != null && Model.PicturePaths.Any())
+                {
+                    int index = 0;
+                    foreach (var picture in Model.PicturePaths)
+                    {
+                        <div class="carousel-item @(index == 0 ? "active" : "")">
+                            <img src="@picture" class="d-block w-100" style="height: 300px; object-fit: cover;" />
+                        </div>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <div class="carousel-item active">
+                        <img src="/images/default-image.jpg" class="d-block w-100" style="height: 300px; object-fit: cover;" />
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlogDetails" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselBlogDetails" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <div class="card-body">
+            <h1 class="card-title">@Model.Title</h1>
+            <p class="card-text">@Model.Description</p>
+            <p><small class="text-muted">Posted by: @Model.CreatedBy on @Model.DateCreated.ToString("MMMM dd, yyyy")</small></p>
+
+            <div class="mt-4 text-center">
+                <div class="mt-3 d-flex align-items-center">
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#shareModal">
+                        Share
+                    </button>
+                </div>
+
+                <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content bg-dark text-white">
+                            <div class="modal-header border-0">
+                                <h5 class="modal-title" id="shareModalLabel">Share this post</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <div class="d-flex justify-content-center mb-3">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=@Url.Action("Details", "Blog", new { id = Model.Id }, ViewContext.HttpContext.Request.Scheme)" target="_blank" class="me-3">
+                                        <i class="fab fa-facebook-square" style="font-size: 40px; color: #4267B2;"></i>
+                                    </a>
+                                    <a href="https://twitter.com/intent/tweet?url=@Url.Action("Details", "Blog", new { id = Model.Id }, ViewContext.HttpContext.Request.Scheme)&text=@Model.Title" target="_blank" class="me-3">
+                                        <i class="fab fa-x-twitter" style="font-size: 40px; color: #1DA1F2;"></i>
+                                    </a>
+                                    <a href="https://api.whatsapp.com/send?text=@Url.Action("Details", "Blog", new { id = Model.Id }, ViewContext.HttpContext.Request.Scheme)" target="_blank" class="me-3">
+                                        <i class="fab fa-whatsapp-square" style="font-size: 40px; color: #25D366;"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=@Url.Action("Details", "Blog", new { id = Model.Id }, ViewContext.HttpContext.Request.Scheme)" target="_blank" class="me-3">
+                                        <i class="fab fa-linkedin" style="font-size: 40px; color: #0077B5;"></i>
+                                    </a>
+                                    <a href="https://pinterest.com/pin/create/button/?url=@Url.Action("Details", "Blog", new { id = Model.Id }, ViewContext.HttpContext.Request.Scheme)&media=&description=@Model.Title" target="_blank" class="me-3">
+                                        <i class="fab fa-pinterest-square" style="font-size: 40px; color: #E60023;"></i>
+                                    </a>
+                                    <a href="mailto:?subject=@Model.Title&body=@Url.Action("Details", "Blog", new { id = Model.Id }, ViewContext.HttpContext.Request.Scheme)" target="_blank" class="me-3">
+                                        <i class="fas fa-envelope" style="font-size: 40px; color: #D44638;"></i>
+                                    </a>
+                                </div>
+
+
+
+                      
+
+                                <div class="mt-3">
+                                    <input type="text" class="form-control text-white bg-dark border-secondary mb-2 text-center" value="@Url.Action("Details", "Blog", new { id = Model.Id }, ViewContext.HttpContext.Request.Scheme)" readonly id="shareLink">
+                                    <button class="btn btn-outline-light btn-sm ms-2" onclick="copyToClipboard('shareLink')">Copy Link</button>
+                                    <span id="copiedMessage" class="text-success ms-2" style="display: none;">Copied!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         
+
+
+
+
+        </div>
+    </div>
+</div>
+
+<h2>Comments</h2>
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <p>@comment.CommentText</p>
+            <p>By: @(comment.IsAnonymous ? "Anonymous" : comment.CommentedBy)</p>
+            <p>On: @comment.DateCommented.ToString("MMMM dd, yyyy")</p>
+            <button class="btn btn-success btn-sm">Approve</button>
+        </div>
+    </div>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form method="post" asp-action="AddComment" asp-route-blogId="@Model.Id">
+        <div class="form-group">
+            <textarea class="form-control" name="commentText" placeholder="Write your comment here..." rows="4"></textarea>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="isAnonymous" />
+            <label class="form-check-label" for="isAnonymous">Post as Anonymous</label>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+    </form>
+}
+else
+{
+    <p><a href="@Url.Action("Login", "Account")">Login</a> or <a href="@Url.Action("Register", "Account")">Register</a> to post a comment.</p>
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<script>
+    function copyToClipboard(elementId) {
+        var inputElement = document.getElementById(elementId);
+        inputElement.select();
+        inputElement.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand("copy");
+         var copiedMessage = document.getElementById("copiedMessage");
+        copiedMessage.style.display = "inline"; // Show the message
+
+        // Hide the "Copied!" message after 2 seconds
+        setTimeout(function() {
+            copiedMessage.style.display = "none";
+        }, 2000); // 2 seconds
+    }
+</script>
+
+
+@* <script>
+    function copyToClipboard(elementId) {
+        var inputElement = document.getElementById(elementId);
+
+        // Select and copy the text without affecting the input
+        inputElement.select();
+        inputElement.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand("copy");
+
+        // Display the "Copied!" message
+        var copiedMessage = document.getElementById("copiedMessage");
+        copiedMessage.style.display = "inline"; // Show the message
+
+        // Hide the "Copied!" message after 2 seconds
+        setTimeout(function() {
+            copiedMessage.style.display = "none";
+        }, 2000); // 2 seconds
+    }
+</script> *@
+
+@* 
+@model Jobportalwebsite.Models.Blog
+
+<div class="container mt-4">
+    <div class="card">
+        <div id="carouselBlogDetails" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @if (Model.PicturePaths != null && Model.PicturePaths.Any())
+                {
+                    int index = 0;
+                    foreach (var picture in Model.PicturePaths)
+                    {
+                        <div class="carousel-item @(index == 0 ? "active" : "")">
+                            <img src="@picture" class="d-block w-100" style="height: 300px; object-fit: cover;" />
+                        </div>
+                        index++;
+                    }
+                }
+                else
+                {
+                    <div class="carousel-item active">
+                        <img src="/images/default-image.jpg" class="d-block w-100" style="height: 300px; object-fit: cover;" />
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlogDetails" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselBlogDetails" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <div class="card-body">
+            <h1 class="card-title">@Model.Title</h1>
+            <p class="card-text">@Model.Description</p>
+            <p><small class="text-muted">Posted by: @Model.CreatedBy on @Model.DateCreated.ToString("MMMM dd, yyyy")</small></p>
+        </div>
+    </div>
+</div>
+
+<h2>Comments</h2>
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <p>@comment.CommentText</p>
+            <p>By: @(comment.IsAnonymous ? "Anonymous" : comment.CommentedBy)</p>
+            <p>On: @comment.DateCommented.ToString("MMMM dd, yyyy")</p>
+            <button class="btn btn-success btn-sm">Approve</button>
+        </div>
+    </div>
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form method="post" asp-action="AddComment" asp-route-blogId="@Model.Id">
+        <div class="form-group">
+            <textarea class="form-control" name="commentText" placeholder="Write your comment here..." rows="4"></textarea>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="isAnonymous" />
+            <label class="form-check-label" for="isAnonymous">Post as Anonymous</label>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+    </form>
+}
+else
+{
+    <p><a href="@Url.Action("Login", "Account")">Login</a> or <a href="@Url.Action("Register", "Account")">Register</a> to post a comment.</p>
+} *@
