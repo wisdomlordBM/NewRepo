@@ -1,44 +1,4 @@
-﻿@* @model IEnumerable<Jobportalwebsite.Models.Blog>
-
-@foreach (var blog in Model)
-{
-    <div class="blog-preview">
-        <img src="@blog.Picture" alt="@blog.Title" style="width: 100px; height: 100px;" />
-        <h2>@blog.Title</h2>
-        <p>@blog.Description</p>
-        <a href="@Url.Action("Details", "Blog", new { id = blog.Id })">Read More</a>
-        <p>Posted on: @blog.DateCreated</p>
-    </div>
-} *@
-
-@* @model IEnumerable<Jobportalwebsite.Models.Blog>
-
-<div class="container mt-4">
-    <h2>Blog Posts</h2>
-    <div class="row">
-        @foreach (var blog in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                   
-                    <img src="@blog.Picture" class="card-img-top" alt="@blog.Title" style="height: 200px; object-fit: cover;" />
-                    <div class="card-body">
-                        <h5 class="card-title">@blog.Title</h5>
-                        <p class="card-text">@blog.Description.Substring(0, Math.Min(200, blog.Description.Length))...</p>
-                        <p><small class="text-muted">Posted by: @blog.CreatedBy </small></p>
-                        <a href="@Url.Action("Details", "Blog", new { id = blog.Id })" class="btn btn-primary">Read More</a>
-
-                        @if (blog.CreatedBy == User.Identity.Name)
-                        {
-                            <a href="@Url.Action("Delete", "Blog", new { id = blog.Id })" class="btn btn-danger">Delete</a>
-                        }
-                       
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-</div> *@
+﻿@* 
 
 @model IEnumerable<Jobportalwebsite.Models.Blog>
 
@@ -93,4 +53,72 @@
             </div>
         }
     </div>
+</div> *@
+@model IEnumerable<Jobportalwebsite.Models.Blog>
+
+<div class="container mt-4">
+    <h2>Blog Posts</h2>
+    <div class="row">
+        @foreach (var blog in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div id="carouselBlog@blog.Id" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @if (blog.PicturePaths != null && blog.PicturePaths.Any())
+                            {
+                                int index = 0;
+                                foreach (var picture in blog.PicturePaths)
+                                {
+                                    <div class="carousel-item @(index == 0 ? "active" : "")">
+                                        <img src="@picture" class="d-block w-100" style="height: 200px; object-fit: cover;" />
+                                    </div>
+                                    index++;
+                                }
+                            }
+                            else
+                            {
+                                <div class="carousel-item active">
+                                    <img src="/images/default-image.jpg" class="d-block w-100" style="height: 200px; object-fit: cover;" />
+                                </div>
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlog@blog.Id" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselBlog@blog.Id" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@blog.Title</h5>
+                        <p class="card-text">@blog.Description.Substring(0, Math.Min(200, blog.Description.Length))...</p>
+
+                        <div class="d-flex align-items-center">
+                            <!-- Fetch the Company Profile Picture -->
+                            @if (blog.Company != null && !string.IsNullOrEmpty(blog.Company.ProfilePicturePath))
+                            {
+                                <div class="me-2">
+                                    <img src="@blog.Company.ProfilePicturePath" alt="Profile Picture" class="profile-picture" style="width: 40px; height: 40px; border-radius: 50%;" />
+                                </div>
+                            }
+                            <p class="card-text"><small class="text-muted">Posted by: @blog.CreatedBy</small></p>
+                        </div>
+
+                        <a href="@Url.Action("Details", "Blog", new { id = blog.Id })" class="btn btn-primary">Read More</a>
+
+                        @if (blog.CreatedBy == User.Identity.Name)
+                        {
+                            <a href="@Url.Action("Delete", "Blog", new { id = blog.Id })" class="btn btn-danger">Delete</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+
+

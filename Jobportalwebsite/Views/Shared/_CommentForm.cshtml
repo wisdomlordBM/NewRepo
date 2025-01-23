@@ -1,0 +1,13 @@
+﻿@using Jobportalwebsite.ViewModels
+@model CommentFormModel
+
+<form method="post" asp-action="AddComment" asp-route-blogId="@Model.BlogId">
+    <div class="form-group">
+        <textarea class="form-control" name="commentText" placeholder="Write your comment here..." rows="4"></textarea>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="isAnonymous" />
+        <label class="form-check-label" for="isAnonymous">Post as Anonymous</label>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+</form>

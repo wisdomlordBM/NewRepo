@@ -1,29 +1,34 @@
-﻿@model IEnumerable<Jobportalwebsite.Models.Jobseekers>
-
-@{
-    Layout = "~/Views/Shared/_Admin.cshtml";
-}
-
-<h2 class="mb-4 text-center">Manage Jobseekers</h2>
+﻿@model IEnumerable<Jobportalwebsite.Models.ApplicationUser>
 
 @if (Model != null && Model.Any())
 {
     <div class="row">
-        @foreach (var jobseeker in Model)
+        @foreach (var applicationUser in Model)
         {
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm h-100" style="border-radius: 15px;">
                     <div class="card-body">
-                        <h5 class="card-title"><strong>Name:</strong> @jobseeker.Name</h5>
-                        <p><strong>Email:</strong> @jobseeker.Email</p>
-                        <p><strong>Location:</strong> @jobseeker.Location</p>
-                        <p><strong>Contact:</strong> @jobseeker.Contact</p>
-                        <p><strong>Description:</strong> <span class="text-truncate">@jobseeker.Description</span></p>
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="@Url.Content(applicationUser.ProfilePicturePath)"
+                                 alt="Profile Picture" class="img-thumbnail"
+                                 style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 10px;" />
+                            <h5 class="mb-0">
+                                <strong>Name:</strong> @applicationUser.FirstName @applicationUser.LastName
+                            </h5>
+                        </div>
+                        <p><strong>Email:</strong> @applicationUser.Email</p>
+                        <p><strong>Location:</strong> @applicationUser.Address</p>
+                        <p><strong>Contact:</strong> @applicationUser.PhoneNumber</p>
+                        <p><strong>Gender:</strong> @applicationUser.Gender</p>
+                        <p><strong>Country:</strong> <span class="text-truncate">@applicationUser.Country</span></p>
 
                         <div class="d-flex justify-content-end">
-                            <!-- Delete Jobseeker -->
-                            <form asp-action="Delete" asp-route-id="@jobseeker.Id" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this jobseeker?');">Delete</button>
+                            <a href="@Url.Action("Details", "Jobseekers", new { email = applicationUser.Email })"
+                               class="btn btn-info btn-sm me-2">Details</a>
+                            <a href="@Url.Action("Edit", "Jobseekers", new { id = applicationUser.Id })"
+                               class="btn btn-warning btn-sm me-2">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@applicationUser.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this jobseeker?');">Delete</button>
                             </form>
                         </div>
                     </div>
@@ -38,146 +43,51 @@ else
 }
 
 
-@* @model IEnumerable<Jobportalwebsite.Models.Jobseekers>
+@* @model IEnumerable<Jobportalwebsite.Models.ApplicationUser>
 
 @{
-    Layout = "~/Views/Shared/_Admin.cshtml";
+    Layout = "~/Views/Shared/_Jobseekers.cshtml";
 }
 
-<h2>Manage Jobseekers</h2>
+<h2 class="mb-4 text-center">Manage Jobseekers</h2>
 
 @if (Model != null && Model.Any())
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Location</th>
-                <th>Contact</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var jobseeker in Model)
-            {
-                <tr>
-                    <td>@jobseeker.Name</td>
-                    <td>@jobseeker.Email</td>
-                    <td>@jobseeker.Location</td>
-                    <td>@jobseeker.Contact</td>
-                    <td>@jobseeker.Description</td>
-                    <td>
-                        @if (jobseeker.IsActive)
-                        {
-                            <span class="badge bg-success">Active</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">Inactive</span>
-                        }
-                    </td>
-                    <td>
-                        <button class="btn btn-secondary" onclick="toggleStatus(@jobseeker.Id, @jobseeker.IsActive)">
-                            @if (jobseeker.IsActive)
-                            {
-                                <span>Deactivate</span>
-                            }
-                            else
-                            {
-                                <span>Activate</span>
-                            }
-                        </button>
+    <div class="row">
+        @foreach (var applicationUser in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100" style="border-radius: 15px;">
+                    <div class="card-body">
+                        <img src="@applicationUser.ProfilePicturePath" alt="Profile Picture" class="img-thumbnail" style="max-width: 50px; margin-right: 10px; border-radius: 50%; object-fit: cover;" />
+                        <h5 class="card-title">
+                            <strong>Name:</strong> @applicationUser.FirstName @applicationUser.LastName
+                        </h5>
+                        <p><strong>Email:</strong> @applicationUser.Email</p>
+                        <p><strong>Location:</strong> @applicationUser.Address</p>
+                        <p><strong>Contact:</strong> @applicationUser.PhoneNumber</p>
+                        <p><strong>Gender:</strong> @applicationUser.Gender</p>
+                        <p><strong>Country:</strong> <span class="text-truncate">@applicationUser.Country</span></p>
 
-                        <!-- Delete Jobseeker -->
-                        <form asp-action="Delete" asp-route-id="@jobseeker.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No jobseekers found.</p>
-}
+                        <div class="d-flex justify-content-end">
+                            <a class="nav-link btn btn-primary btn-sm me-2" asp-area="" asp-controller="Jobseekers" asp-action="Details" asp-route-id="@applicationUser.Id">Details</a>
+                            <a class="nav-link btn btn-warning btn-sm me-2" asp-area="" asp-controller="Jobseekers" asp-action="Edit" asp-route-id="@applicationUser.Id">Edit</a>
 
-@section Scripts {
-    <script>
-        function toggleStatus(jobseekerId, isActive) {
-            $.ajax({
-                url: '/Admin/ToggleStatus',  // Action to toggle status
-                type: 'POST',
-                data: { id: jobseekerId, isActive: isActive },
-                success: function (result) {
-                    location.reload();  // Reload the page to reflect changes
-                },
-                error: function (err) {
-                    alert('Error toggling status');
-                }
-            });
+                            <!-- Delete Jobseeker -->
+                            <form asp-action="Delete" asp-route-id="@applicationUser.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this jobseeker?');">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
-    </script>
-} *@
-
-
-
-
-
-
-@* @model IEnumerable<Jobportalwebsite.Models.Jobseekers>
-
-@{
-    Layout = "~/Views/Shared/_Admin.cshtml";
-}
-
-<h2>Registered Jobseekers</h2>
-
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Location</th>
-                <th>Contact</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var jobseeker in Model)
-            {
-                <tr>
-                    <td>@jobseeker.Name</td>
-                    <td>@jobseeker.Email</td>
-                    <td>@jobseeker.Location</td>
-                    <td>@jobseeker.Contact</td>
-                    <td>@jobseeker.Description</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@jobseeker.Id" class="btn btn-info">Details</a>
-                        <a asp-action="Edit" asp-route-id="@jobseeker.Id" class="btn btn-warning">Edit</a>
-                        <form asp-action="Delete" asp-route-id="@jobseeker.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    </div>
 }
 else
 {
-    <p>No jobseekers found.</p>
+    <p class="text-center">No jobseekers found.</p>
 } *@
-
-
-
 
 
 

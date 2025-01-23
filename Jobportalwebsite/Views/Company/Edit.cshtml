@@ -2,6 +2,44 @@
 @{
     Layout = "~/Views/Shared/_Company.cshtml";
 }
+<div>
+    <h2>Edit Company Profile</h2>
+    <form asp-action="Edit" asp-route-id="@Model.Id" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Company Name</label>
+            <input type="text" asp-for="Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" asp-for="Location" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Industry</label>
+            <input type="text" asp-for="Industry" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Website URL</label>
+            <input type="text" asp-for="WebsiteUrl" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Profile Picture</label>
+            <input type="file" name="profilePicture" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-outline-success">Save Changes</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>
+
+
+@* @model Jobportalwebsite.Models.Company
+@{
+    Layout = "~/Views/Shared/_Company.cshtml";
+}
 <div >
     <h2>Edit Company Profile</h2>
     <form asp-action="Edit" asp-route-id="@Model.Id">
@@ -25,9 +63,14 @@
             <label>Website URL</label>
             <input type="text" asp-for="WebsiteUrl" class="form-control" />
         </div>
+        <div class="form-group">
+            <label>Profile Picture</label>
+            <input type="file" asp-for="ProfilePicturePath" class="form-control" />
+        </div>
+
 
         <button type="submit" class="btn btn-outline-success">Save Changes</button>
         <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
     </form>
-</div>
+</div> *@
 

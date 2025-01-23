@@ -78,18 +78,27 @@
                                         </li>
                                     }
                                 </ul>
-                                  
+                                    <!-- Conditionally Show "My Profile" Link for Jobseekers -->
+                                    @if (User.Identity.IsAuthenticated && User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "Jobseeker")
+                                    {
+                                        <a class="nav-link" asp-area="" asp-controller="Jobseekers" asp-action="Index">My Profile</a>
+                                    }
                             </div>
                         </div>
 
                             <ul class="navbar-nav ms-auto">
+
                                 <li class="nav-item me-3">
+
                                     @if (User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value == "Jobseeker")
                                     {
+
                                         <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#notificationsModal" style="position: relative;">
                                             <i class="fas fa-bell" style="font-size: 1.5rem;"></i>
                                             <span id="notificationCount" class="badge bg-danger" style="position: absolute; top: 0; right: 0; display: none;">0</span>
                                         </a>
+
+
                                     }
                                 </li>
                             </ul>

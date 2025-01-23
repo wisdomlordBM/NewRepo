@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Jobportalwebsite.Models.Comment>
+
+@foreach (var reply in Model)
+{
+        <div class="d-flex mb-2">
+            <img src="@reply.ProfilePicturePath" alt="Profile Picture" class="rounded-circle me-3" style="width: 30px; height: 30px; object-fit: cover;" />
+            <div>
+                <p class="mb-0">@reply.CommentText</p>
+                <small>@(reply.IsAnonymous ? "Anonymous" : reply.CommentedBy) on @reply.DateCommented.ToString("MMMM dd, yyyy")</small>
+                <button class="btn btn-link btn-sm text-decoration-none" data-bs-toggle="collapse" data-bs-target="#replyForm@reply.Id">Reply</button>
+
+                <div class="collapse" id="replyForm@reply.Id">
+                    <form method="post" asp-action="AddComment" asp-route-blogId="@reply.BlogId" asp-route-parentCommentId="@reply.Id">
+                        <textarea class="form-control mb-2" name="commentText" placeholder="Write your reply..." rows="2"></textarea>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="isAnonymous" />
+                            <label class="form-check-label">Post as Anonymous</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                    </form>
+                </div>
+
+            @if (reply.Replies != null && reply.Replies.Any())
+            {
+                        <div class="ms-4 mt-3">
+                    @Html.Partial("_CommentReplies", reply.Replies)
+                        </div>
+            }
+            </div>
+        </div>
+}
+

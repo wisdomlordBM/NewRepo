@@ -1,28 +1,42 @@
-﻿@model Jobportalwebsite.Models.Jobseekers
+﻿@model Jobportalwebsite.Models.ApplicationUser
+@{
+    bool isOwnProfile = ViewBag.IsOwnProfile ?? false;
+    Layout = isOwnProfile ? "~/Views/Shared/_Jobseekers.cshtml" : "~/Views/Shared/_Layout.cshtml";
+}
+
 
 <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f8f9fa;">
     <div style="border-radius: 20px; background: #ffffff; padding: 30px; max-width: 600px; width: 100%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
         <h2 style="text-align: center; color: #007bff; font-weight: bold;">My Personal Details</h2>
         <h4 style="text-align: center; margin-bottom: 20px;">My Profile</h4>
         <hr style="border-top: 2px solid #007bff;" />
+        <div style="text-align: center;">
+            <img src="@Model.ProfilePicturePath" alt="Profile Picture" class="img-thumbnail"
+                 style="width: 150px; height: 150px; margin-bottom: 15px; border-radius: 50%; object-fit: cover;" />
+        </div>
+
         <dl style="display: grid; grid-template-columns: 1fr 2fr; row-gap: 10px; column-gap: 20px;">
             <dt style="font-weight: bold;">Name:</dt>
-            <dd>@Model.Name</dd>
+            <dd>@Model.FirstName @Model.LastName</dd>
 
             <dt style="font-weight: bold;">Email:</dt>
             <dd>@Model.Email</dd>
 
             <dt style="font-weight: bold;">Location:</dt>
-            <dd>@Model.Location</dd>
+            <dd>@Model.Address</dd>
 
             <dt style="font-weight: bold;">Contact:</dt>
-            <dd>@Model.Contact</dd>
+            <dd>@Model.PhoneNumber</dd>
 
-            <dt style="font-weight: bold;">Description:</dt>
-            <dd>@Model.Description</dd>
+            <dt style="font-weight: bold;">Country:</dt>
+            <dd>@Model.Country</dd>
         </dl>
+        <a href="javascript:history.back()" class="btn btn-outline-secondary mt-3">
+            <i class="bi bi-arrow-left-circle"></i> Back
+        </a>
     </div>
 </div>
+
 
 
 

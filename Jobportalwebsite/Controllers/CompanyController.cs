@@ -12,7 +12,7 @@ using Jobportalwebsite.Viewmodel;
 
 namespace Jobportalwebsite.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CompanyController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -259,7 +259,9 @@ namespace Jobportalwebsite.Controllers
                 Name = company.Name,
                 Location = company.Location,
                 Industry = company.Industry,
-                WebsiteUrl = company.WebsiteUrl
+                WebsiteUrl = company.WebsiteUrl,
+               ProfilePicturePath = company.ProfilePicturePath // Map the property
+
             };
 
             return View(viewModel);
@@ -304,106 +306,7 @@ namespace Jobportalwebsite.Controllers
 
 
 
-        ////GET: Company/Index
-        //public IActionResult Index()
-        //{
-        //    if (!User.Identity.IsAuthenticated)
-        //    {
-        //        return RedirectToAction("Login", "Account");
-        //    }
-
-        //    var userEmail = User.Identity.Name;
-
-        //    var company = _context.Companies
-        //        .FirstOrDefault(c => c.Email == userEmail);
-
-        //    if (company == null)
-        //    {
-        //        return RedirectToAction("CompanyRegistration");
-        //    }
-
-
-
-        //    var jobs = _context.Jobs
-        //        .Where(j => j.CompanyId == company.Id)
-        //        .Select(j => new JobViewModel
-        //        {
-        //            Id = j.Id,
-        //            JobTitle = j.JobTitle,
-        //            Description = j.Description,
-        //            Location = j.Location,
-        //            EmploymentType = j.EmploymentType,
-        //            Salary = j.Salary,
-        //            ImageUrl = j.ImageUrl,
-        //            JobPostStatus = j.PostStatus
-        //        })
-        //        .ToList();
-
-        //    var viewModel = new CompanyDashboardViewModel
-        //    {
-        //        CompanyId = company.Id,
-        //        Name = company.Name,
-        //        Location = company.Location,
-        //        Industry = company.Industry,
-        //        WebsiteUrl = company.WebsiteUrl,
-        //        Jobs = jobs
-        //    };
-
-        //    return View(viewModel);
-
-
-        //}
-
-        //public IActionResult Index()
-        //{
-        //    if (!User.Identity.IsAuthenticated)
-        //    {
-        //        return RedirectToAction("Login", "Account");
-        //    }
-
-        //    var userEmail = User.Identity.Name;
-
-        //    var company = _context.Companies
-        //        .FirstOrDefault(c => c.Email == userEmail);
-
-        //    if (company == null)
-        //    {
-        //        return RedirectToAction("CompanyRegistration");
-        //    }
-
-        //    var viewModel = new CompanyDashboardViewModel
-        //    {
-        //        CompanyId = company.Id,
-        //        Name = company.Name,
-        //        Location = company.Location,
-        //        Industry = company.Industry,
-        //        WebsiteUrl = company.WebsiteUrl
-
-        //    };
-
-        //    return View(viewModel);
-        //}
-
-
-        //public IActionResult GetJobs(int companyId)
-        //{
-        //    var jobs = _context.Jobs
-        //        .Where(j => j.CompanyId == companyId)
-        //        .Select(j => new JobViewModel
-        //        {
-        //            Id = j.Id,
-        //            JobTitle = j.JobTitle,
-        //            Description = j.Description,
-        //            Location = j.Location,
-        //            EmploymentType = j.EmploymentType,
-        //            Salary = j.Salary,
-        //            ImageUrl = j.ImageUrl,
-        //            JobPostStatus = j.PostStatus
-        //        })
-        //        .ToList();
-
-        //    return PartialView("_JobsPartial", jobs);
-        //}
+    
 
 
 
@@ -417,11 +320,9 @@ namespace Jobportalwebsite.Controllers
             }
             return View(company);  // Return the company model to the Edit view
         }
-
-        // POST: Company/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Company company)
+        public IActionResult Edit(int id, Company company, IFormFile? profilePicture)
         {
             if (id != company.Id)
             {
@@ -432,10 +333,46 @@ namespace Jobportalwebsite.Controllers
             {
                 try
                 {
-                    _context.Update(company);  // Update the company in the database
-                    _context.SaveChanges();    // Save changes to the database
+                    var existingCompany = _context.Companies.Find(id);
+                    if (existingCompany == null)
+                    {
+                        return NotFound();  // Return a 404 if the company is not found
+                    }
+
+                    // Update profile picture if a new file is uploaded
+                    if (profilePicture != null && profilePicture.Length > 0)
+                    {
+                        // Generate a unique file name to avoid conflicts
+                        var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(profilePicture.FileName)}";
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/companies", fileName);
+
+                        // Ensure the directory exists
+                        Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+                        // Save the file to the server
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            profilePicture.CopyTo(stream);
+                        }
+
+                        // Update the ProfilePicturePath property
+                        existingCompany.ProfilePicturePath = $"/images/companies/{fileName}";
+                    }
+
+                    // Update other properties
+                    existingCompany.Name = company.Name;
+                    existingCompany.Description = company.Description;
+                    existingCompany.Location = company.Location;
+                    existingCompany.Industry = company.Industry;
+                    existingCompany.WebsiteUrl = company.WebsiteUrl;
+
+                    // Save changes to the database
+                    _context.Update(existingCompany);
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Index", "Company");  // Redirect to the Index page if successful
                 }
-                catch (System.Exception)
+                catch (Exception)
                 {
                     if (!_context.Companies.Any(c => c.Id == company.Id))
                     {
@@ -443,12 +380,42 @@ namespace Jobportalwebsite.Controllers
                     }
                     throw;  // Rethrow the exception for other errors
                 }
-
-                return RedirectToAction("Index", "Company");  // Redirect to the Index page if successful
             }
 
             return View(company);  // Return the company model back to the view if validation fails
         }
+
+        //// POST: Company/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Edit(int id, Company company)
+        //{
+        //    if (id != company.Id)
+        //    {
+        //        return NotFound();  // Return a 404 if the company ID does not match
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(company);  // Update the company in the database
+        //            _context.SaveChanges();    // Save changes to the database
+        //        }
+        //        catch (System.Exception)
+        //        {
+        //            if (!_context.Companies.Any(c => c.Id == company.Id))
+        //            {
+        //                return NotFound();  // Return a 404 if the company ID is not found
+        //            }
+        //            throw;  // Rethrow the exception for other errors
+        //        }
+
+        //        return RedirectToAction("Index", "Company");  // Redirect to the Index page if successful
+        //    }
+
+        //    return View(company);  // Return the company model back to the view if validation fails
+        //}
 
         // GET: Company/Delete/5
         public IActionResult Delete(int id)
@@ -476,17 +443,71 @@ namespace Jobportalwebsite.Controllers
             return RedirectToAction("Index");  // Redirect to the Index page after deletion
         }
 
-        // GET: Company/Details/5
-        public async Task<IActionResult> Details(int id)
+        [Route("Company/Details/{email}")]
+        public IActionResult Details(string email)
         {
-            var company = await _context.Companies.FindAsync(id);  // Find the company by ID
+            var company = _context.Companies.FirstOrDefault(c => c.Email == email);
             if (company == null)
             {
-                return NotFound();  // Return a 404 if the company is not found
+                return NotFound();
             }
 
-            return View(company);  // Return the company model to the Details view
+            var currentUserEmail = User.Identity?.Name; 
+            bool isCompanyOwner = string.Equals(currentUserEmail, company.Email, StringComparison.OrdinalIgnoreCase);
+
+            // Pass ownership status to the view
+            ViewBag.IsCompanyOwner = isCompanyOwner;
+
+            return View(company);
         }
+
+
+        //[Route("Company/Details/{email}")]
+        //public IActionResult Details(string email)
+        //{
+        //    var company = _context.Companies.FirstOrDefault(c => c.Email == email);
+        //    if (company == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(company);
+        //}
+
+
+        //public IActionResult Details(string id)
+        //{
+        //    if (string.IsNullOrEmpty(id))
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    // Convert the id to an int or handle as string
+        //    int companyId;
+        //    var company = int.TryParse(id, out companyId)
+        //        ? _context.Companies.FirstOrDefault(c => c.Id == companyId) // By numeric ID
+        //        : _context.Companies.FirstOrDefault(c => c.Email == id);   // By email
+
+        //    if (company == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(company); // Return the Company's profile view
+        //}
+
+        //public IActionResult Details(int id)
+        //{
+        //    var company = _context.Companies.Find(id);
+        //    if (company == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(company);
+        //}
+
+
 
         public IActionResult CompanyRegistration()
         {

@@ -131,7 +131,22 @@
     }
 }
 
+.profile-picture {
+    width: 150px; /* Adjust size as needed */
+    height: 150px; /* Ensure it matches width for perfect circle */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image scales correctly within the circle */
+    border: 2px solid #ccc; /* Optional: Adds a border */
+    margin: 0 auto; /* Centers the image */
+}
 
+textarea {
+    resize: none;
+}
+
+img.rounded-circle {
+    object-fit: cover;
+}
 
 
 

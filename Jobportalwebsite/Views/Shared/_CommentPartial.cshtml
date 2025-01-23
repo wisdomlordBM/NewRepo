@@ -1,0 +1,26 @@
+﻿@* @using Jobportalwebsite.ViewModels.CommentViewModel
+@CommentViewModel
+
+<div class="card mb-3">
+    <div class="card-body d-flex">
+        <img src="@Model.ProfilePicturePath" alt="Profile Picture" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;" />
+        <div>
+            <p>@Model.CommentText</p>
+            <p><small>@(Model.IsAnonymous ? "Anonymous" : Model.CommentedBy) on @Model.DateCommented.ToString("MMMM dd, yyyy")</small></p>
+            <button class="btn btn-link btn-sm text-decoration-none" data-bs-toggle="collapse" data-bs-target="#replyForm@Model.Id">Reply</button>
+
+            @await Html.PartialAsync("_ReplyForm", new ReplyFormModel { ParentCommentId = Model.Id, BlogId = ViewData["BlogId"] as int? })
+
+            @if (Model.Replies != null && Model.Replies.Any())
+            {
+                <div class="ms-4 mt-3">
+                    @foreach (var reply in Model.Replies)
+                    {
+                        @await Html.PartialAsync("_CommentPartial", reply)
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div> *@
+

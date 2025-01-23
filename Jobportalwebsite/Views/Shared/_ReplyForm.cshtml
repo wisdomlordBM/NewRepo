@@ -1,0 +1,15 @@
+﻿@using Jobportalwebsite.ViewModels
+@model ReplyFormModel
+
+
+<div class="collapse" id="replyForm@Model.ParentCommentId">
+    <form method="post" asp-action="AddComment" asp-route-blogId="@Model.BlogId" asp-route-parentCommentId="@Model.ParentCommentId">
+        <textarea class="form-control mb-2" name="commentText" placeholder="Write your reply..." rows="2"></textarea>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="isAnonymous" />
+            <label class="form-check-label">Post as Anonymous</label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+    </form>
+</div>
+

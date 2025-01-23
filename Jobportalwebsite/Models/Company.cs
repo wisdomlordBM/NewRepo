@@ -14,7 +14,8 @@ namespace Jobportalwebsite.Models
         public string? Industry { get; set; }
         public string? WebsiteUrl { get; set; } 
         public int? EmployerId { get; set; }
-       
+        public string? ProfilePicturePath { get; set; }
+
         public virtual User? Employer { get; set; }
         
     }

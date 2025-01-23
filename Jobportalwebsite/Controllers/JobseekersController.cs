@@ -14,6 +14,7 @@ using System.Linq;
 using System;
 using System.Threading.Tasks;
 using UploadCVViewModel = Jobportalwebsite.Models.UploadCVViewModel;
+using Microsoft.Extensions.Hosting;
 
 
 
@@ -23,19 +24,54 @@ namespace Jobportalwebsite.Controllers
     public class JobseekersController : Controller
     {
         private readonly ApplicationDbContext _context;
-       
+        private readonly IWebHostEnvironment _environment;
 
-        public JobseekersController(ApplicationDbContext context)
+        public JobseekersController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         // GET: Jobseekers
+
+
+
+
+
+
         public IActionResult Index()
         {
-            var jobseekers = _context.Jobseekers.ToList(); 
-            return View(jobseekers); 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Retrieve users who belong to the "Jobseeker" role
+
+            var UserID = _context.UserRoles
+                .Where(ur => ur.RoleId == _context.Roles.FirstOrDefault(r => r.Name == "Jobseeker").Id)
+                .Select(ur => ur.UserId);
+
+            var user = _context.Users
+                .Where(u => userId.Contains(u.Id))
+                .ToList();
+            // Pass the profile picture path (or default) to the view
+          
+            return View(user);
         }
+
+        //public IActionResult Index()
+        //{
+        //    // Filter users with the role of "Jobseeker"
+        //    var jobseekers = _context.Users
+        //        .Where(u => u.Role == "Jobseeker") // Adjust "Role" to match your actual property for roles
+        //        .ToList();
+
+        //    return View(jobseekers);
+        //}
+
+        //public IActionResult Index()
+        //{
+        //    var jobseekers = _context.Jobseekers.ToList(); 
+        //    return View(jobseekers); 
+        //}
 
         // DELETE: Jobseeker
         [HttpPost]
@@ -316,189 +352,6 @@ namespace Jobportalwebsite.Controllers
         //    return View(new UploadCVViewModel { ApplicationId = applicationId });
         //}
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> UploadCV(UploadCVViewModel model)
-        //{
-        //    if (model.CV == null || model.CV.Length == 0)
-        //    {
-        //        ModelState.AddModelError("CV", "Please upload a valid CV file.");
-        //        return View(model);
-        //    }
-
-        //    var application = _context.Applications.FirstOrDefault(a => a.Id == model.ApplicationId);
-
-        //    if (application == null || application.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "cvs");
-        //    if (!Directory.Exists(uploadPath))
-        //    {
-        //        Directory.CreateDirectory(uploadPath);
-        //    }
-
-        //    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.CV.FileName);
-        //    var filePath = Path.Combine(uploadPath, uniqueFileName);
-
-        //    using (var stream = new FileStream(filePath, FileMode.Create))
-        //    {
-        //        await model.CV.CopyToAsync(stream);
-        //    }
-
-        //    application.CVPath = "/uploads/cvs/" + uniqueFileName;
-        //    _context.Update(application);
-        //    await _context.SaveChangesAsync();
-
-        //    TempData["SuccessMessage"] = "CV uploaded successfully!";
-        //    return RedirectToAction("Index", "Job");
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(Application application, int jobId)
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID
-
-
-
-        //    // Check if the user has already applied for the job
-        //    var existingApplication = _context.Applications
-        //        .FirstOrDefault(a => a.JobId == jobId && a.UserId == userId);
-
-
-
-        //    if (existingApplication != null)
-        //    {
-        //        TempData["ErrorMessage"] = "Please wait for the company's response. You cannot apply for the same job more than once.";
-        //        return RedirectToAction("Index", "Job"); // Redirect to job listings or another appropriate page
-        //    }
-
-        //    // Handle CV file upload
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (application.CV != null)
-        //        {
-        //            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "cvs");
-
-        //            if (!Directory.Exists(uploadPath))
-        //            {
-        //                Directory.CreateDirectory(uploadPath); // Create the directory if it doesn't exist
-        //            }
-
-        //            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(application.CV.FileName);
-        //            var filePath = Path.Combine(uploadPath, uniqueFileName);
-
-        //            using (var stream = new FileStream(filePath, FileMode.Create))
-        //            {
-        //                await application.CV.CopyToAsync(stream);
-        //            }
-
-        //            application.CVPath = "/uploads/cvs/" + uniqueFileName;
-        //        }
-
-        //        var job = _context.Jobs.Include(j => j.Company).FirstOrDefault(j => j.Id == jobId);
-        //        if (job == null)
-        //        {
-        //            return NotFound(); // Job not found
-        //        }
-
-        //        var myApplication = new Application
-        //        {
-        //            JobId = jobId,
-        //            Description = application.Description,
-        //            Contact = application.Contact,
-        //            EducationLevel = application.EducationLevel,
-        //            FieldOfStudy = application.FieldOfStudy,
-        //            SchoolName = application.SchoolName,
-        //            City = application.City,
-        //            State = application.State,
-        //            JobTitle = job.JobTitle,
-        //            CompanyName = job.Company.Name,
-        //            Country = application.Country,
-        //            EmploymentType = application.EmploymentType,
-        //            UserId = userId, // Store the current user's ID
-        //            DateApplied = DateTime.Now
-        //        };
-
-        //        _context.Applications.Add(myApplication);
-        //        await _context.SaveChangesAsync();
-
-        //        TempData["SuccessMessage"] = "Application submitted successfully!";
-        //        return RedirectToAction("Index", "Job");
-        //    }
-
-        //    return View(); // Return the view with validation errors
-        //}
-
-
-
-
-        //////[HttpPost]
-        //////[ValidateAntiForgeryToken]
-        //////public IActionResult Create(Application application, int jobId)
-        //////{
-        //////    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID
-        //////    var user = _context.Users.FirstOrDefault(u => u.Id == userId); // Retrieve the current user
-
-        //////    if (ModelState.IsValid)
-        //////    {
-        //////        if (application.CV != null)
-        //////        {
-        //////            // Ensure a valid file is uploaded
-        //////            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", application.CV.FileName);
-
-        //////            using (var stream = new FileStream(filePath, FileMode.Create))
-        //////            {
-        //////                await application.CV.CopyToAsync(stream);
-        //////            }
-
-        //////            // Store the file path in the model or database as needed
-        //////            application.CVPath = "/uploads/" + application.CV.FileName; // Save this path to the database if necessary
-        //////        }
-        //////        var job = _context.Jobs.Include(j => j.Company).FirstOrDefault(j => j.Id == jobId);
-
-        //////        if (job == null)
-        //////        {
-        //////            return NotFound(); // If the job doesn't exist, return 404
-        //////        }
-
-        //////        // Create a new application with data from the form and user
-        //////        var myApplication = new Application
-        //////        {
-        //////            JobId = jobId,
-        //////            Description = application.Description,
-        //////            Contact = application.Contact,
-        //////            EducationLevel = application.EducationLevel,
-        //////            FieldOfStudy = application.FieldOfStudy,
-        //////            SchoolName = application.SchoolName,
-        //////            City = application.City,
-        //////            State = application.State,
-        //////            JobTitle = job.JobTitle,
-        //////            CompanyName = job.Company.Name,
-        //////            Country = application.Country,
-        //////            EmploymentType = application.EmploymentType,
-        //////            UserId = userId, // Only store the UserId
-        //////            DateApplied = DateTime.Now
-        //////        };
-
-        //////        // Save the new application to the database
-        //////        _context.Applications.Add(myApplication);
-        //////        _context.SaveChanges();
-
-        //////        TempData["SuccessMessage"] = "Application submitted successfully!"; // Temporary success message
-
-        //////        return RedirectToAction("Index", "Job");
-        //////    }
-
-        //////    return View();
-        //////}
-
-
-
-
-
 
 
 
@@ -506,29 +359,68 @@ namespace Jobportalwebsite.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string id)
         {
-            var jobseeker = _context.Jobseekers.Find(id);
-            if (jobseeker == null)
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(jobseeker);
+
+            return View(user);
         }
 
-        
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Edit(Jobseekers jobseeker)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Update(jobseeker);
-        //        _context.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(jobseeker);
-        //}
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ApplicationUser model, IFormFile? profilePicture)
+        {
+            if (ModelState.IsValid)
+            {
+                // Retrieve the user from the database
+                var user = await _context.Users.FindAsync(model.Id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                // Update user details
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Country = model.Country;
+
+                // Handle profile picture upload
+                if (profilePicture != null && profilePicture.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    var fileName = Guid.NewGuid() + Path.GetExtension(profilePicture.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await profilePicture.CopyToAsync(stream);
+                    }
+
+                    user.ProfilePicturePath = "/uploads/" + fileName;
+                }
+
+                // Save changes to the database
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Details", new { id = user.Id });
+            }
+
+            return View(model);
+        }
+
+
 
         //[HttpGet]
         //public IActionResult Delete(int id)
@@ -541,7 +433,7 @@ namespace Jobportalwebsite.Controllers
         //    return View(jobseeker);
         //}
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -553,26 +445,70 @@ namespace Jobportalwebsite.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("Index");
+
         }
 
-
-        public IActionResult Details()
+        [Route("Jobseekers/Details/{email}")]
+        public IActionResult Details(string email)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId == null)
+            if (string.IsNullOrEmpty(email))
             {
-                return Unauthorized();
+                return BadRequest();
             }
 
-            var jobseeker = _context.Jobseekers.FirstOrDefault(j => j.UserId == userId);
-            if (jobseeker == null)
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(jobseeker);
+            var currentUserEmail = User.Identity?.Name; 
+            bool isOwnProfile = string.Equals(currentUserEmail, user.Email, StringComparison.OrdinalIgnoreCase);
+
+            ViewBag.IsOwnProfile = isOwnProfile;
+
+            return View(user);
         }
+
+
+
+        //[Route("Jobseekers/Details/{email}")]
+        //public IActionResult Details(string email)
+        //{
+        //    if (string.IsNullOrEmpty(email))
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    var user = _context.Users.FirstOrDefault(u => u.Email == email);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(user);
+        //}
+
+
+
+        ////public IActionResult Details()
+        ////{
+        ////    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        ////    if (userId == null)
+        ////    {
+        ////        return Unauthorized();
+        ////    }
+
+        ////    var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+        ////    if (user == null)
+        ////    {
+        ////        return NotFound();
+        ////    }
+
+        ////    return View(user);
+        ////}
+
 
         public IActionResult Detailsaaa(int id)
         {
@@ -585,5 +521,4 @@ namespace Jobportalwebsite.Controllers
         }
     }
 }
-
 

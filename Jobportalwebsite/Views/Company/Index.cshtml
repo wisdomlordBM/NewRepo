@@ -5,6 +5,67 @@
 
 <div class="container mt-4">
     <h2>Company Profile</h2>
+
+    <!-- Display the Profile Picture -->
+    <div class="text-center mb-4">
+        <img src="@Model.ProfilePicturePath" alt="Profile Picture" class="profile-picture" />
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th>Location</th>
+                <th>Industry</th>
+                <th>Website</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Name</td>
+                <td>@Model.Location</td>
+                <td>@Model.Industry</td>
+                <td><a href="@Model.WebsiteUrl" target="_blank">Website</a></td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+
+                    <a asp-action="Delete" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash3-fill"></i> Delete
+                    </a>
+
+                    <a asp-action="Details" asp-route-id="@Model.CompanyId" class="btn btn-sm btn-info">
+                        <i class="bi bi-info-circle"></i> Details
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-end mt-4">
+        <a asp-action="Jobs" asp-route-companyId="@Model.CompanyId" class="btn btn-primary">
+            <i class="bi bi-briefcase"></i> View Jobs
+        </a>
+
+        <a asp-controller="Blog" asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> Create Blog
+        </a>
+    </div>
+</div>
+
+
+
+
+
+@* @model Jobportalwebsite.ViewModel.CompanyDashboardViewModel
+@{
+    Layout = "~/Views/Shared/_Company.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Company Profile</h2>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -44,7 +105,7 @@
         </a>
         
     </div>
-</div>
+</div> *@
 
 
 

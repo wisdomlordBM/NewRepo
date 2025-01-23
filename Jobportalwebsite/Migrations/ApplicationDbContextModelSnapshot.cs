@@ -208,6 +208,12 @@ namespace Jobportalwebsite.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -242,6 +248,9 @@ namespace Jobportalwebsite.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -263,6 +272,8 @@ namespace Jobportalwebsite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("Blogs");
                 });
 
@@ -274,6 +285,9 @@ namespace Jobportalwebsite.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BlogCompanyId")
+                        .HasColumnType("int");
+
                     b.Property<int>("BlogId")
                         .HasColumnType("int");
 
@@ -283,15 +297,42 @@ namespace Jobportalwebsite.Migrations
                     b.Property<string>("CommentedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCommented")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("EntityType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAnonymous")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsCompany")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("JobseekerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserRole")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BlogId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("JobseekerId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -320,6 +361,9 @@ namespace Jobportalwebsite.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicturePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WebsiteUrl")
@@ -411,6 +455,66 @@ namespace Jobportalwebsite.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Jobseekers");
+                });
+
+            modelBuilder.Entity("Jobportalwebsite.Models.Reply", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BlogCompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateReplied")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EntityType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAnonymous")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCompany")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("JobseekerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RepliedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReplyText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserRole")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("JobseekerId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Replies");
                 });
 
             modelBuilder.Entity("Jobportalwebsite.Models.User", b =>
@@ -656,6 +760,15 @@ namespace Jobportalwebsite.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Jobportalwebsite.Models.Blog", b =>
+                {
+                    b.HasOne("Jobportalwebsite.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("Jobportalwebsite.Models.Comment", b =>
                 {
                     b.HasOne("Jobportalwebsite.Models.Blog", "Blog")
@@ -664,7 +777,25 @@ namespace Jobportalwebsite.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Jobportalwebsite.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("Jobportalwebsite.Models.User", "Jobseeker")
+                        .WithMany()
+                        .HasForeignKey("JobseekerId");
+
+                    b.HasOne("Jobportalwebsite.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Blog");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Jobseeker");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Jobportalwebsite.Models.Company", b =>
@@ -690,6 +821,35 @@ namespace Jobportalwebsite.Migrations
                     b.HasOne("Jobportalwebsite.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Jobportalwebsite.Models.Reply", b =>
+                {
+                    b.HasOne("Jobportalwebsite.Models.Comment", "Comment")
+                        .WithMany("Replies")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Jobportalwebsite.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("Jobportalwebsite.Models.User", "Jobseeker")
+                        .WithMany()
+                        .HasForeignKey("JobseekerId");
+
+                    b.HasOne("Jobportalwebsite.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Jobseeker");
 
                     b.Navigation("User");
                 });
@@ -760,6 +920,11 @@ namespace Jobportalwebsite.Migrations
             modelBuilder.Entity("Jobportalwebsite.Models.Blog", b =>
                 {
                     b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("Jobportalwebsite.Models.Comment", b =>
+                {
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }

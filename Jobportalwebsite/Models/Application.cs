@@ -22,7 +22,6 @@ namespace Jobportalwebsite.Models
         [NotMapped]
         public IFormFile? CV { get; set; }
 
-        // Add CVPath property
         public string? CVPath { get; set; } // Store the path to the uploaded CV file
 
         public int JobId { get; set; }

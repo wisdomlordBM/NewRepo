@@ -14,9 +14,11 @@ namespace Jobportalwebsite.Models
         public string? State { get; set; }
         public string? Country { get; set; }
         public DateTime? DateCreated { get; set; }
-        [NotMapped]
-        public string? Role { get; set; }
+        public string? ProfilePicturePath { get; set; }
 
+
+        public string? Role { get; set; }
+      
     }
 }
 

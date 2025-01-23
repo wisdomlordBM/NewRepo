@@ -9,6 +9,8 @@ namespace Jobportalwebsite.ViewModel // Changed from Viewmodel to ViewModel
         public string? Location { get; set; }
         public string? Industry { get; set; }
         public string? WebsiteUrl { get; set; }
+        public string? ProfilePicturePath { get; set; } // Added property for profile picture
+
         public List<JobViewModel>? Jobs { get; set; }
         public int? JobId { get; set; }
     }

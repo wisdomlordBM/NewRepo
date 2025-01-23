@@ -1,12 +1,34 @@
 ﻿@model Jobportalwebsite.Models.Company
-@{
+
+@* @{
     Layout = "~/Views/Shared/_Company.cshtml";
+} *@
+@{
+    bool isCompanyOwner = ViewBag.IsCompanyOwner ?? false;
+    Layout = isCompanyOwner ? "~/Views/Shared/_Company.cshtml" : "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container">
-    <h2>@Model.Name</h2>
-    <p><strong>Industry:</strong> @Model.Industry</p>
-    <p><strong>Location:</strong> @Model.Location</p>
-    <p><strong>Description:</strong> @Model.Description</p>
-    <p><strong>Website:</strong> <a href="@Model.WebsiteUrl" target="_blank">@Model.WebsiteUrl</a></p>
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4" style="max-width: 600px; margin: auto;">
+        <div class="card-body text-center">
+            <!-- Profile Picture -->
+            <div class="mb-3">
+                <img src="@Model.ProfilePicturePath" alt="Company Profile Picture" class="rounded-circle img-fluid" style="width: 150px; height: 150px;">
+            </div>
+            <!-- Company Details -->
+            <h3 class="card-title">@Model.Name</h3>
+            <p ><strong>Industry:</strong>@Model.Industry</p>
+            <p> <strong>Description:</strong>@Model.Description</p>
+            <p><strong>Location:</strong> @Model.Location</p>
+            <p><strong>Website:</strong> <a href="@Model.WebsiteUrl" target="_blank">@Model.WebsiteUrl</a></p>
+
+            <!-- Back Button -->
+            <a href="javascript:history.back()" class="btn btn-outline-secondary mt-3">
+                <i class="bi bi-arrow-left-circle"></i> Back
+            </a>
+        </div>
+    </div>
 </div>
+
+
 

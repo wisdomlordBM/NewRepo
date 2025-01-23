@@ -1,28 +1,33 @@
-﻿ @model Jobportalwebsite.Models.Jobseekers
+﻿@model Jobportalwebsite.Models.ApplicationUser
 
 <h2>Edit Jobseeker Profile</h2>
 
-<form asp-action="Edit">
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label asp-for="Name"></label>
-        <input type="text" asp-for="Name" class="form-control" required />
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" required />
     </div>
     <div class="form-group">
-        <label asp-for="Email"></label>
-        <input type="email" asp-for="Email" class="form-control" required />
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" required />
     </div>
     <div class="form-group">
-        <label asp-for="Location"></label>
-        <input type="text" asp-for="Location" class="form-control" required />
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" required />
     </div>
     <div class="form-group">
-        <label asp-for="Contact"></label>
-        <input type="text" asp-for="Contact" class="form-control" required />
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" required />
     </div>
     <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control" required></textarea>
+        <label asp-for="Country"></label>
+        <input asp-for="Country" class="form-control" required />
     </div>
-    <button type="submit" class="btn btn-outline-success">Save Changes</button>
+    <div class="form-group">
+        <label>Profile Picture</label>
+        <input type="file" name="profilePicture" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
+
 

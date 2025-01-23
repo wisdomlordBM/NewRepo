@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Folder Include="NewFolder\" />
+    <Folder Include="wwwroot\images\companies\" />
     <Folder Include="wwwroot\NewFolder1\" />
     <Folder Include="wwwroot\NewFolder\" />
     <Folder Include="wwwroot\uploads\cvs\" />
